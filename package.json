@@ -9,5 +9,7 @@
     "preview": "npm --prefix client run preview",
     "lint": "npm --prefix client run lint"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@formspree/react": "^3.0.0"
+  }
 }
