@@ -1,0 +1,16 @@
+node_modules/
+client/node_modules/
+dist/
+client/dist/
+.vite/
+client/.vite/
+.eslintcache
+
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+*.log
+.env
+.env.*
+!.env.example
