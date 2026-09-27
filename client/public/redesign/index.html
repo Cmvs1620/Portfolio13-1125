@@ -50,10 +50,9 @@ em{font-style:normal}
 [data-theme="b"] .shade{display:none}
 [data-theme="b"] em,[data-theme="b"] .man-acc{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--acc);letter-spacing:-.02em}
 [data-theme="b"] .rot span{font-family:var(--serif);font-style:italic;color:var(--acc);letter-spacing:-.01em}
-[data-theme="b"] .h-acc{display:block;position:absolute;right:0;top:.62em;font:italic 400 .52em/1 var(--serif);letter-spacing:-.02em;color:var(--acc);pointer-events:none}
 [data-theme="b"] .nav{background:none}
-[data-theme="b"] .tabbar a[aria-current="true"]{color:#0A0A0A}
-@media (min-width:861px){[data-theme="b"] .h-acc{right:auto;left:3.62em;top:.4em;font-size:.6em}}
+[data-theme="b"] .hero h1 .ln:nth-of-type(2){font-family:var(--serif);font-style:italic;font-weight:400;color:var(--acc);letter-spacing:-.025em;font-size:1.08em;padding-right:.12em}
+html[data-theme="b"] .tabbar a[aria-current="true"]{color:#0A0A0A!important}
 [data-theme="b"] .lens{display:block;position:fixed;left:0;top:0;width:180px;height:180px;margin:-90px 0 0 -90px;border-radius:50%;z-index:40;pointer-events:none;
   backdrop-filter:blur(1.2px) saturate(1.6) brightness(1.12) contrast(1.05);-webkit-backdrop-filter:blur(1.2px) saturate(1.6) brightness(1.12) contrast(1.05);
   background:rgba(255,255,255,.035);border:1.5px solid rgba(255,255,255,.42);box-shadow:inset 0 0 30px rgba(255,255,255,.08),inset 0 -12px 40px rgba(120,170,255,.12),0 10px 40px rgba(0,0,0,.25);opacity:0;transition:opacity .4s,width .5s cubic-bezier(.2,.8,.2,1),height .5s cubic-bezier(.2,.8,.2,1),margin .5s cubic-bezier(.2,.8,.2,1)}
@@ -563,7 +562,6 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
     <h1 aria-label="Carl-Maurits">
       <span class="ln" data-split>Carl-</span>
       <span class="ln" data-split>Maurits</span>
-      <span class="h-acc" aria-hidden="true">visual</span>
     </h1>
     <div class="reel" aria-hidden="true"><div class="reel-in" id="reel"></div></div>
     <p class="hv-line" aria-label="Creative designer for brand identity, art direction, campaigns and motion.">
@@ -865,7 +863,7 @@ Promise.all([document.fonts ? document.fonts.ready : 0, ...waits, new Promise(r 
     .fromTo(glowIntro, { v: 0 }, { v: 1, duration: 2.4, ease: 'expo.out' }, '-=.5')
     .from('.hero .ch', { yPercent: 115, duration: 1.3, ease: 'expo.out', stagger: .035, onComplete: () => document.querySelector('.hero h1').classList.add('free') }, '<.2')
     .to('.throw-hint', { opacity: 1, duration: .8 }, '-=.4')
-    .from('.h-acc', { yPercent: 60, opacity: 0, duration: 1.2, ease: 'expo.out' }, '<')
+    
     .from('.hero-info > *', { y: 20, opacity: 0, duration: 1, ease: 'expo.out', stagger: .08 }, '-=1');
 });
 
