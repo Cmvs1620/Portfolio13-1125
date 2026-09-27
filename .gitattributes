@@ -15,3 +15,4 @@
 # redesign preview: plain git blobs, not LFS
 client/public/redesign/** !filter !diff !merge
 client/public/scroll-film/** !filter !diff !merge
+client/public/cmvs2000/** !filter !diff !merge
