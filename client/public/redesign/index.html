@@ -9,6 +9,7 @@
 </head>
 <body>
 
+<link rel="icon" type="image/svg+xml" href="img/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -107,7 +108,8 @@ main,footer{position:relative;z-index:2}
 .nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;
   padding:calc(20px + env(safe-area-inset-top,0px)) var(--gutter) 20px;mix-blend-mode:difference;color:#fff}
 .nav a{text-decoration:none}
-.nav .mark{font:500 13px var(--mono);letter-spacing:.04em}
+.nav .mark{font:500 13px var(--mono);letter-spacing:.04em;display:inline-flex;align-items:center;gap:10px}
+.nav .mark .logo{width:26px;height:auto;fill:currentColor;flex:0 0 auto}
 .nav ul{display:flex;gap:clamp(16px,3vw,40px);list-style:none;margin:0;padding:0}
 .nav ul a{font:500 12.5px var(--mono);text-transform:uppercase;letter-spacing:.04em;position:relative}
 .nav ul a::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .5s cubic-bezier(.6,0,.2,1)}
@@ -159,7 +161,10 @@ h2{font-weight:500;letter-spacing:-.05em;line-height:.9;margin:0;text-wrap:balan
 .work-head h2{font-size:clamp(3.2rem,9vw,9rem)}
 .work-head p{margin:0;color:var(--text2);max-width:34ch;font-size:16px}
 .pin{height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
-.track{display:flex;gap:clamp(24px,4vw,64px);padding:0 var(--gutter);width:max-content;will-change:transform}
+.track{display:flex;gap:clamp(24px,4vw,64px);padding:0 var(--gutter);width:max-content;will-change:transform;cursor:grab;touch-action:pan-y;-webkit-user-select:none;user-select:none}
+.track.dragging{cursor:grabbing}
+.track.dragging .shot{pointer-events:none}
+.track img{-webkit-user-drag:none}
 .panel{width:min(60vw,960px);flex:none}
 .shot{all:unset;cursor:pointer;display:block;position:relative;width:100%;aspect-ratio:16/10;overflow:hidden;background:var(--ground-2)}
 .shot:focus-visible{outline:2px solid var(--blue);outline-offset:6px}
@@ -293,7 +298,7 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
 .ov-text .body p{margin:0 0 1.1em}
 .ov-text .body p:first-child{font-size:clamp(22px,2vw,30px);line-height:1.3;color:var(--bone);letter-spacing:-.015em}
 .gal{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,24px);align-items:start;margin:clamp(56px,10vh,110px) var(--gutter) 0}
-.gal img{width:100%;height:auto;display:block;background:var(--ground-2)}
+.gal img,.gal video{width:100%;height:auto;display:block;background:var(--ground-2)}
 .ov-next{margin:clamp(56px,10vh,110px) var(--gutter) 0;border-top:1px solid var(--line);padding:24px 0 100px;display:flex;justify-content:space-between;align-items:center;gap:16px}
 .ov-next button{all:unset;cursor:pointer;font-weight:500;font-size:clamp(2.4rem,6vw,6rem);letter-spacing:-.055em;line-height:.9}
 .ov-next button:focus-visible{outline:2px solid var(--blue)}
@@ -531,7 +536,7 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
 </div>
 
 <nav class="nav" aria-label="Main">
-  <a class="mark" href="#top">CMVS.DESIGN</a>
+  <a class="mark" href="#top" aria-label="CMVS.DESIGN, back to top"><svg class="logo" viewBox="0 0 40.98 38.46" aria-hidden="true"><path d="M18.57,11.75c-.29,2.25-1.2,3.97-2.74,5.16-1.54,1.19-3.64,1.78-6.31,1.78-1.54,0-2.91-.21-4.1-.62s-2.18-1.02-2.98-1.82c-.8-.8-1.4-1.78-1.82-2.93-.41-1.16-.62-2.47-.62-3.97s.21-2.81.62-3.97c.41-1.16,1.02-2.14,1.82-2.93.79-.8,1.79-1.41,2.98-1.82,1.19-.41,2.56-.62,4.1-.62,2.67,0,4.78.59,6.31,1.78,1.54,1.19,2.46,2.9,2.74,5.13h-4.8c-.17-1.06-.62-1.86-1.35-2.38-.72-.52-1.7-.77-2.92-.77-1.59,0-2.79.46-3.6,1.38s-1.21,2.32-1.21,4.2.4,3.25,1.21,4.19,2.01,1.39,3.6,1.39c1.21,0,2.18-.25,2.91-.77.71-.52,1.17-1.31,1.35-2.38h4.8Z"/><path d="M36.57,18.45v-4.75c0-.66.03-1.25.09-1.77.07-.52.14-.99.23-1.42.08-.43.19-.83.29-1.2.1-.38.2-.75.28-1.14l-.92-.24c-.18.83-.52,1.79-1.03,2.89-.51,1.1-1.05,2.32-1.64,3.69l-1.19,2.74h-4.03l-1.19-2.74c-.58-1.35-1.13-2.59-1.64-3.69-.51-1.1-.86-2.06-1.03-2.89l-.92.24c.08.39.17.77.28,1.14.1.38.2.77.29,1.2.08.43.17.9.23,1.42.07.52.09,1.11.09,1.77v4.75h-4.36V.25h4.61l4.12,7.59c.49.9.78,1.7.88,2.4s.16,1.29.16,1.77v.58h.97v-.57c0-.49.06-1.07.16-1.77.1-.7.4-1.5.88-2.4L36.31.26h4.61v18.19h-4.36Z"/><path d="M15.45,19.14h4.98l-6.99,19.24h-5.96L.48,19.14h4.98l3.51,10.08c.09.23.17.47.26.7.13.31.23.61.25.85.03.24.03.34.04.56,0,.23,0,.42,0,.61v.77h1.86v-.77c0-.19,0-.4,0-.61,0-.23.02-.34.04-.58.03-.24.14-.59.24-.85.11-.29.19-.45.25-.68l3.51-10.08Z"/><path d="M22.87,22.58c.33-.69.84-1.28,1.51-1.8.68-.51,1.52-.91,2.56-1.2,1.03-.29,3.76-.44,5.16-.44s2.61.15,3.62.44c1.02.29,1.86.7,2.53,1.2.68.51,1.18,1.11,1.51,1.8.33.69.52,1.42.56,2.21h-4.99c0-.22-.06-.43-.16-.64-.1-.21-.29-.4-.56-.56-.26-.17-.59-.3-1.01-.4-.41-.1-2.43-.15-3.02-.15-1.2,0-2.04.15-2.52.46-.48.31-.72.74-.72,1.29,0,.4.18.72.53.94.35.23.81.4,1.37.53.56.12,1.21.23,1.94.31.72.08,2.98.19,3.73.33.75.13,1.5.31,2.22.54.72.23,1.37.55,1.94.98.56.42,1.03.98,1.37,1.65.35.67.53,1.51.53,2.51,0,.87-.2,1.67-.6,2.4-.4.72-.99,1.35-1.74,1.87-.75.52-1.68.92-2.78,1.2s-3.87.42-5.27.42-2.64-.15-3.73-.45c-1.09-.3-2-.71-2.77-1.25-.75-.54-1.34-1.19-1.74-1.95-.4-.76-.62-1.59-.66-2.49h4.99c0,.34.09.64.27.91.18.27.44.52.78.72.34.2.75.36,1.24.46.49.11,1.03.16,1.62.16s2.64-.04,3.12-.1c.49-.07.89-.18,1.24-.34.34-.16.6-.37.78-.63.18-.26.27-.57.27-.94,0-.47-.18-.84-.53-1.1-.35-.26-.81-.48-1.37-.64-.56-.16-2.72-.29-3.45-.39-.72-.1-1.47-.22-2.22-.35-.75-.13-1.5-.31-2.22-.53-.72-.22-1.37-.53-1.94-.91-.56-.4-1.03-.9-1.37-1.51-.35-.62-.53-1.39-.53-2.33,0-.79.16-1.52.5-2.21Z"/></svg><span>CMVS.DESIGN</span></a>
   <ul>
     <li><a href="#work">Work</a></li>
     <li><a href="#about">About</a></li>
@@ -612,11 +617,11 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
   </section>
 
   <section class="work" id="work">
-    <div class="sh"><span class="lbl n">(02)</span><span class="lbl">Work</span><span class="lbl d">Six projects, open any of them</span></div>
+    <div class="sh"><span class="lbl n">(02)</span><span class="lbl">Work</span><span class="lbl d">Nine projects, open any of them</span></div>
     <div class="work-head">
       <h2>Selected <em>work</em></h2>
-      <p>Six projects across luxury, iGaming, hospitality and product. Open any of them for the full story.</p>
-      <p class="lbl dim wcount" aria-live="polite"><b id="wNow">01</b> / 06 <span>Swipe</span></p>
+      <p>Nine projects across luxury, iGaming, hospitality, beauty and product. Open any of them for the full story.</p>
+      <p class="lbl dim wcount" aria-live="polite"><b id="wNow">01</b> / 09 <span>Drag</span></p>
     </div>
     <div class="pin">
       <div class="track" id="track"></div>
@@ -662,6 +667,7 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
       <button class="btn" id="copy" type="button">Copy email</button>
     </div>
     <div class="links">
+      <a href="cv.pdf" target="_blank" rel="noopener">CV (PDF)</a>
       <a href="https://www.linkedin.com/in/carl-maurits-von-schantz" target="_blank" rel="noopener">LinkedIn</a>
       <a href="https://www.instagram.com/mauritsvonschantz" target="_blank" rel="noopener">Instagram</a>
       <span>+46 70 148 49 10</span>
@@ -729,62 +735,90 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
    CONTENT (from the portfolio repo)
 ========================================================= */
 const P = [
-  { id:"givenchy", title:"Givenchy", cat:"Luxury footwear", place:"Paris, France",
-    lede:"Shaping high-end footwear collections with a focus on detail, quality and timeless elegance.",
-    text:[
-      "Contributing to the creative vision behind Givenchy footwear, from first sketch to finished shoe.",
-      "The role covered sketching, material selection and print renderings to the brand's exacting standards, plus the presentation boards that carried each idea forward. It demanded meticulous attention to detail and a deep understanding of luxury aesthetics.",
-      "A key project was the development of the Shark Lock and Voyou lines, from initial concept to final production. I worked on mood boards, colour selection and design detailing, helping define the tone of the collection. Seeing those designs come to life underlined how much precision matters in luxury fashion."
-    ],
-    did:["Footwear design","Shark Lock line","Voyou line","Sketching","Print renderings","Material selection","Colour direction","Presentation boards"],
-    cover:"givenchy-cowboy", gallery:["givenchy-amalia","givenchy-cover","givenchy-bunny","givenchy-jeans","givenchy-shark","givenchy-giv2","givenchy-giv3","givenchy-shoe","givenchy-giv1"] },
-  { id:"paf", title:"Paf", cat:"iGaming, multibrand", place:"Nordics",
+  { id:"paf", title:"Paf", cat:"iGaming, multibrand", place:"Stockholm, Sweden",
     lede:"Graphic design and digital content for Paf's Swedish market under a multibrand strategy.",
     text:[
       "Designing campaigns, CRM and brand material for several iGaming brands at once.",
-      "I work closely with the CRM and Digital Marketing teams, researching positioning, competitors and market trends so every asset fits both the brand and the market.",
-      "A key project was building the full brand profile for 1x2: its visual identity and a complete set of assets made for the Swedish market. Alongside that I produce graphics, motion and localised content for different audiences and campaign types, and I've set up processes that shorten feedback loops and keep collaboration smooth."
+      "I work closely with the CRM and Digital Marketing teams, turning market insight and brand direction into brand assets, motion graphics and localised campaign content, balancing creativity, efficiency and tight deadlines.",
+      "Alongside the day-to-day output I've set up processes that shorten feedback loops and keep collaboration smooth across brands and markets."
     ],
-    did:["Brand identity design","1x2 brand profile","CRM assets","Campaign assets","Motion graphics","Localised content","App store assets","Process design"],
-    cover:"paf-cover", gallery:["paf-bill","paf-billboard","paf-atp","paf-ettkryss","paf-phones","paf-gonz","paf-icon_2","paf-logo"] },
-  { id:"corniche", title:"Corniche", cat:"Watches, marketing", place:"Nice, France",
-    lede:"Design and marketing that bring watches to life through visuals and digital storytelling.",
+    did:["Brand assets","CRM assets","Campaign design","Motion graphics","Localised content","App store assets","Website visuals","Process design"],
+    cover:"paf-bill", gallery:["v:paf-intropaf","v:paf-3d-copy","paf-website2","paf-apps","paf-bill","paf-gonz","paf-2","paf-billboard","paf-phones","paf-ettkryss"] },
+  { id:"givenchy", title:"Givenchy", cat:"Luxury footwear", place:"Paris, France",
+    lede:"Shaping high-end footwear collections with a focus on detail, quality and bold design.",
     text:[
-      "Visual content, campaigns and product storytelling for an independent watch brand.",
-      "I designed campaigns, took part in the product design process and produced digital media for Corniche's platforms, with the goal of lifting the brand's marketing and social presence.",
-      "The biggest piece was the Heritage Chronograph campaign, built with KeyShot and Adobe Creative Suite. New social content lifted engagement and drove traffic to the site."
+      "Contributing to the creative vision behind Givenchy footwear, from first sketch to finished shoe.",
+      "The role covered sketching, material selection and print renderings to the brand's exacting standards, plus the presentation boards that carried each idea forward.",
+      "I was deeply involved in the Shark Lock and Voyou lines, from concept to production, shaping mood, colour and detailing. It refined my technical precision and my understanding of contemporary luxury footwear."
     ],
-    did:["Campaign design","Heritage Chronograph","Product visuals","KeyShot rendering","Social media assets","Print and packaging","Website visuals","Product design input"],
-    cover:"corniche-1", gallery:["corniche-cornichecover","corniche-website","corniche-sides","corniche-box","corniche-insta1","corniche-story","corniche-front","corniche-insta4"] },
+    did:["Footwear design","Shark Lock line","Voyou line","Sketching","Print renderings","Material selection","Colour direction","Presentation boards"],
+    cover:"givenchy-amalia", gallery:["givenchy-amalia","givenchy-bunny","givenchy-cowboy","givenchy-giv1","givenchy-jeans","givenchy-giv2","givenchy-giv3","givenchy-shark","givenchy-shoe"] },
+  { id:"1x2", title:"1X2", cat:"Sports betting brand", place:"Åland, Finland",
+    lede:"A national sports-betting brand in the real-money gambling industry, from positioning to a full visual system.",
+    text:[
+      "I led the creation of the complete brand and visual identity for 1x2, Paf's sports-betting brand.",
+      "The work covered the whole brand lifecycle: early positioning and conceptual direction through to a visual system implemented across web, app and marketing channels.",
+      "The brand is built around the classic betting notation 1–X–2, leaning into clarity, heritage and trust. Instead of casino-style hype it's designed to feel confident, rational and focused, for bettors who value odds, information and match-day flow over entertainment-led visuals."
+    ],
+    did:["Lead designer","Brand positioning","Visual identity","Logo and mark","App design","Website design","Campaign system","Multi-platform rollout"],
+    cover:"1x2-cover", gallery:["v:1x2-main","1x2-app","1x2-atp","1x2-cover3-1","1x2-laptop-website2","1x2-nhl"] },
   { id:"yono", title:"Yono Sabo", cat:"Restaurant identity", place:"Stockholm, Sweden",
     lede:"Clean geometry and subtle playfulness for a restaurant where Asian street food meets Mexican.",
     text:[
-      "An identity for a Stockholm restaurant fusing Asian and Mexican street food.",
+      "Full brand development for a Stockholm restaurant fusing Asian and Mexican street food.",
       "The logo is built to be simple with personality. The double O's read as eyes, which makes the mark memorable and friendly, and it works as both a wordmark and a standalone icon.",
-      "Well-spaced letters keep it readable, and the rounded, minimal forms give it a modern feel that carries from signage and menus to bags, merch and social."
+      "Designed for sharing, discovery and social dining, the identity carries from signage and menus to bags, merch and social, with well-spaced letters and rounded, minimal forms that feel modern and warm."
     ],
     did:["Brand identity design","Logo and icon","Signage","Interior graphics","Menu design","Packaging","Merchandise","Social templates"],
-    cover:"yono-sign", gallery:["yono-bag","yono-burito","yono-otto","yono-yono","yono-stickers","yono-meny","yono-chair","yono-shirt","yono-phone","yono-chart"] },
+    cover:"yono-bag", gallery:["yono-bag","yono-burito","yono-chair","yono-meny","yono-otto","yono-shirt","yono-phone","yono-sign","yono-yono","yono-stickers","yono-chart"] },
+  { id:"lundi", title:"Lundi", cat:"Skincare branding", place:"Paris, France",
+    lede:"A minimal identity that mirrors Lundi's philosophy: simple, effective and quietly confident.",
+    text:[
+      "Graphic profile, packaging and product imagery for Lundi.",
+      "The products are straightforward by nature, so the visual language avoids excess and focuses on clarity and balance. Packaging is clean and refined, letting the product's effectiveness speak without distraction.",
+      "The visuals pair natural textures, crumpled paper and rock formations, with smooth, structured bottle forms. The contrast nods to natural ingredients without falling back on predictable green cues."
+    ],
+    did:["Graphical profile","Logo","Packaging design","Product photography","Art direction","Ads and marketing"],
+    cover:"lundi-gras", gallery:["lundi-babapapper","lundi-creme","lundi-gras","lundi-logo","lundi-melisrocks","lundi-rocks","lundi-stock"] },
+  { id:"corniche", title:"Corniche", cat:"Watches, marketing", place:"Nice, France",
+    lede:"Design and marketing that bring watches to life through visuals and digital storytelling.",
+    text:[
+      "Product design, campaigns and social content for an independent watch brand.",
+      "I helped design and build the Heritage Chronograph and shaped its visual direction across campaigns and digital platforms.",
+      "Using KeyShot and Adobe Creative Suite I created campaign visuals and social content that lifted engagement and supported the brand's growth."
+    ],
+    did:["Campaign design","Heritage Chronograph","Product visuals","KeyShot rendering","Social media assets","Print and packaging","Website visuals","Product design input"],
+    cover:"corniche-cornichecover", gallery:["corniche-cornichecover","corniche-1","corniche-content","corniche-box","corniche-insta1","corniche-sides","corniche-story","corniche-insta4","corniche-website","corniche-front"] },
   { id:"betula", title:"Betula", cat:"Hotel identity", place:"Helsinki, Finland",
     lede:"A visual identity for hotels that turn unconventional city buildings into sustainable places to stay.",
     text:[
       "A graphic profile for Betula Hotel, a concept that converts unexpected city locations into sustainable hotels.",
       "The palette comes from the earthy greens and browns of nature. The typography is simple and modern to match the brand's focus on clarity.",
-      "The system runs from the birch-leaf mark and its construction grid to signage, printed guides and editorial."
+      "The system runs from the birch-leaf mark and its construction grid to signage, printed travel guides and editorial."
     ],
     did:["Graphic profile","Logo construction","Colour system","Typography","Signage","Printed guides","Editorial layout","Brand guidelines"],
-    cover:"betula-sign2", gallery:["betula-cover","betula-graphical","betula-logo","betula-open1"] },
+    cover:"betula-sign2", gallery:["v:betula-graphical","betula-cover","betula-logo","betula-open1","betula-sign2"] },
+  { id:"dank", title:"Dank", cat:"Festival branding", place:"Copenhagen, Denmark",
+    lede:"A living identity for Dankness Festival: bold type and soft, sculptural 3D that move like the music.",
+    text:[
+      "Visual identity for Dankness Festival in Copenhagen.",
+      "Working with the team behind the festival, the goal was an identity that captures movement, sound and community: playful but refined, with bold typography and soft, sculptural 3D forms carrying the energy of the event.",
+      "From the logo to the 3D visuals and merch, every element was designed to feel alive and connected to Copenhagen's creative scene, a world around the music that feels both digital and human."
+    ],
+    did:["Visual identity","Logo","3D visuals","Motion","Poster design","Merchandise"],
+    cover:"dank-red1", gallery:["v:dank-glas","dank-2","dank-blom","dank-fest","dank-logo","dank-red1","dank-tshirt"] },
   { id:"zuru", title:"Zuru", cat:"IoT app UI", place:"Paris, France",
     lede:"A friendly smart-home app that makes everyday tasks easier and more personal.",
     text:[
       "UI design for ZURU Tech's home IoT system.",
-      "The idea was to make everyday home tasks simple and add a personal touch to how people control their devices: lights, climate, media and rooms, on phone and tablet."
+      "The idea was to make everyday home tasks a breeze and add a personal touch to how people control their devices: lights, climate, media and rooms, on phone and tablet."
     ],
     did:["User interface design","Mobile app","Tablet app","Device controls","Room scenes","Onboarding"],
-    cover:"zuru-gal", gallery:["zuru-ipad1","zuru-ipad2","zuru-p-1","zuru-p-2","zuru-p-3","zuru-p-4","zuru-p-12"] },
+    cover:"zuru-cover", gallery:["zuru-cover","zuru-ipad1","zuru-ipad2","zuru-p1","zuru-p-2","zuru-p-3","zuru-p-4","zuru-p-12","zuru-gal"] },
 ];
 const CLIENTS = ["Givenchy","Paf","Corniche","H&M","Utsikt","Ryska Posten"];
-const img = n => `img/${n}.webp`;
+const img = n => `img/${n.replace(/^v:/, '')}.webp`;
+const media = (g, alt) => g.startsWith('v:') ? `<video muted loop playsinline autoplay preload="metadata" poster="${img(g)}" aria-label="${alt}"><source src="img/${g.slice(2)}.webm" type="video/webm"><source src="img/${g.slice(2)}.mp4" type="video/mp4"></video>` : `<img src="${img(g)}" alt="${alt}" decoding="async">`;
 
 /* =========================================================
    BUILD DOM
@@ -885,6 +919,7 @@ if (!reduce) {
 }
 
 const wNow = document.getElementById('wNow');
+let workST = null;
 const mm = gsap.matchMedia();
 mm.add('(prefers-reduced-motion: no-preference)', () => {
   // horizontal work track (desktop and phone)
@@ -892,6 +927,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
   const tween = gsap.to(track, { x: () => -dist(), ease: 'none',
     scrollTrigger: { trigger: '.pin', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: .8, invalidateOnRefresh: true, anticipatePin: 1,
       onUpdate: s => { gsap.set('#workbar', { scaleX: s.progress }); if (wNow) wNow.textContent = String(Math.round(s.progress * (P.length - 1)) + 1).padStart(2, '0'); } } });
+  workST = tween.scrollTrigger;
   gsap.utils.toArray('.panel').forEach(p => {
     gsap.fromTo(p.querySelector('img'), { xPercent: 7 }, { xPercent: -7, ease: 'none',
       scrollTrigger: { trigger: p, containerAnimation: tween, start: 'left right', end: 'right left', scrub: true } });
@@ -1166,7 +1202,7 @@ const fill = i => {
     <p class="lbl yr">${p.place}</p>`;
   ovHero.src = img(p.cover); ovHero.alt = `${p.title} key visual`;
   ovText.innerHTML = p.text.map(t => `<p>${t}</p>`).join('');
-  ovGal.innerHTML = p.gallery.map((g, k) => `<img src="${img(g)}" alt="${p.title}, image ${k + 1}" decoding="async">`).join('');
+  ovGal.innerHTML = p.gallery.map((g, k) => media(g, `${p.title}, image ${k + 1}`)).join('');
   ovNext.textContent = P[(i + 1) % P.length].title;
   ov.scrollTop = 0;
 };
@@ -1186,6 +1222,34 @@ const close = () => {
   if (lenis) lenis.start();
   if (lastFocus) lastFocus.focus({ preventScroll: true });
 };
+/* drag the work track (mouse and touch): horizontal drag scrubs the pinned scroll, with a little momentum */
+{
+  let down = false, sx = 0, sy = 0, s0 = 0, moved = false, lastX = 0, lastT = 0, v = 0, axis = null;
+  const ratio = () => workST ? (workST.end - workST.start) / Math.max(1, track.scrollWidth - innerWidth) : 1;
+  const clampY = y => Math.max(workST.start, Math.min(workST.end, y));
+  const go = (y, o) => { if (lenis) lenis.scrollTo(y, o); else scrollTo({ top: y, behavior: o && o.immediate ? 'auto' : 'smooth' }); };
+  track.addEventListener('pointerdown', e => {
+    if (e.button > 0 || !workST || !workST.isActive) return;
+    down = true; moved = false; axis = e.pointerType === 'mouse' ? 'x' : null;
+    sx = lastX = e.clientX; sy = e.clientY; s0 = scrollY; lastT = performance.now(); v = 0;
+  });
+  addEventListener('pointermove', e => {
+    if (!down) return;
+    const dx = e.clientX - sx, dy = e.clientY - sy;
+    if (!axis) { if (Math.hypot(dx, dy) < 8) return; axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y'; }
+    if (axis !== 'x') { down = false; return; }
+    if (!moved && Math.abs(dx) > 4) { moved = true; track.classList.add('dragging'); }
+    const now = performance.now(); v = v * .6 + ((e.clientX - lastX) / Math.max(8, now - lastT)) * .4; lastX = e.clientX; lastT = now;
+    go(clampY(s0 - dx * ratio()), { immediate: true });
+  }, { passive: true });
+  const up = () => {
+    if (!down) return; down = false; track.classList.remove('dragging');
+    if (moved && workST) go(clampY(scrollY - v * 380 * ratio()), { duration: 1.1, easing: t => 1 - Math.pow(1 - t, 3) });
+  };
+  addEventListener('pointerup', up); addEventListener('pointercancel', up);
+  track.addEventListener('click', e => { if (moved) { e.preventDefault(); e.stopImmediatePropagation(); moved = false; } }, true);
+  track.addEventListener('dragstart', e => e.preventDefault());
+}
 track.addEventListener('click', e => { const b = e.target.closest('[data-open]'); if (b) open(+b.dataset.open); });
 ovClose.addEventListener('click', close);
 ovNext.addEventListener('click', () => {
