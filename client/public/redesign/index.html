@@ -41,6 +41,8 @@ em{font-style:normal}
 [data-theme="b"] #gl{display:none}
 [data-theme="b"] .aura{display:block;position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#02040A}
 .aura b{position:absolute;border-radius:50%;will-change:transform}
+#auraGl{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1}
+.aura.gl b{display:none}
 .aura .b1{width:95vmax;height:80vmax;left:-30vmax;top:10vh;background:radial-gradient(closest-side,rgba(44,98,176,.85),rgba(28,66,130,.35) 55%,rgba(0,0,0,0))}
 .aura .b2{width:80vmax;height:70vmax;right:-25vmax;top:-30vmax;background:radial-gradient(closest-side,rgba(44,88,160,.8),rgba(24,52,104,.35) 55%,rgba(0,0,0,0))}
 .aura .b3{width:70vmax;height:60vmax;right:-20vmax;bottom:-25vmax;background:radial-gradient(closest-side,rgba(92,110,132,.55),rgba(50,64,84,.25) 55%,rgba(0,0,0,0))}
@@ -518,7 +520,7 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
 </style>
 
 <canvas id="gl" aria-hidden="true"></canvas>
-<div class="aura" id="aura" aria-hidden="true"><b class="b1"></b><b class="b2"></b><b class="b3"></b><b class="b4"></b><b class="b5"></b></div>
+<div class="aura" id="aura" aria-hidden="true"><canvas id="auraGl"></canvas><b class="b1"></b><b class="b2"></b><b class="b3"></b><b class="b4"></b><b class="b5"></b></div>
 <div class="lens" id="lens" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
 <div class="shade" aria-hidden="true"></div>
@@ -1366,9 +1368,9 @@ copyBtn.addEventListener('click', () => {
 (() => {
   const root = document.documentElement;
   const q = new URLSearchParams(location.search).get('theme');
-  let saved = null; try { saved = localStorage.getItem('cmvs-theme'); } catch (e) {}
-  const set = t => { if (t === 'b') root.dataset.theme = 'b'; else delete root.dataset.theme; try { localStorage.setItem('cmvs-theme', t); } catch (e) {} };
-  set(q === 'a' || q === 'b' ? q : (saved || 'a'));
+  let saved = null; try { saved = localStorage.getItem('cmvs-theme2'); } catch (e) {}
+  const set = t => { if (t === 'b') root.dataset.theme = 'b'; else delete root.dataset.theme; try { localStorage.setItem('cmvs-theme2', t); } catch (e) {} };
+  set(q === 'a' || q === 'b' ? q : (saved || 'b'));
   document.getElementById('themeSw').addEventListener('click', () => set(root.dataset.theme === 'b' ? 'a' : 'b'));
 
   // aura: slow drift + scroll + pointer parallax
@@ -1387,6 +1389,109 @@ copyBtn.addEventListener('click', () => {
       b.style.transform = `translate3d(${x.toFixed(2)}vw,${y.toFixed(2)}vh,0) scale(${(1 + Math.sin(w * .6 + i) * .08).toFixed(3)})`;
     });
   });
+
+
+  // ---------- live aura (WebGL): flowing gradient + scroll-driven glass orb ----------
+  (() => {
+    const cv = document.getElementById('auraGl');
+    const g = cv.getContext('webgl', { antialias: false, premultipliedAlpha: false, powerPreference: 'low-power' });
+    if (!g) { cv.remove(); return; }
+    const vs = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+    const fs = `precision highp float;
+uniform vec2 uR;uniform float uT,uV,uWarm,uCool;uniform vec3 uO;uniform vec2 uM;
+float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}
+float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*n(p);p=p*2.03+vec2(1.7,9.2);a*=.5;}return v;}
+vec3 bg(vec2 uv){
+  vec2 p=uv*vec2(uR.x/uR.y,1.)*1.0;
+  float t=uT*.045;
+  p.y+=uV*.012;
+  vec2 q=vec2(fbm(p+vec2(0.,t)),fbm(p+vec2(5.2,1.3)-t));
+  vec2 r=vec2(fbm(p+2.2*q+vec2(1.7,9.2)+t*.7),fbm(p+2.2*q+vec2(8.3,2.8)-t*.6));
+  float f=fbm(p+(2.4+abs(uV)*.04)*r+uM*.35);
+  vec3 c0=vec3(.008,.016,.04),c1=vec3(.05,.11,.25),c2=vec3(.17,.38,.69),c3=vec3(.36,.43,.52);
+  vec3 col=mix(c0,c1,smoothstep(.2,.55,f));
+  col=mix(col,c2,smoothstep(.42,.95,f*(.8+q.x*.5))*(.85+uCool*.3));
+  col=mix(col,c3,smoothstep(.62,.95,r.y)*.35);
+  col+=vec3(.95,.62,.18)*smoothstep(.72,1.,f*r.x*1.6)*uWarm*.55;
+  col*=mix(.35,1.,smoothstep(1.25,.25,length((uv-.5)*vec2(1.2,1.))));
+  return col;
+}
+void main(){
+  vec2 fc=gl_FragCoord.xy,uv=fc/uR;
+  vec3 col=bg(uv);
+  vec2 d=(fc-uO.xy)/uO.z; float L=length(d);
+  if(L<1.){
+    float z=sqrt(1.-L*L);
+    vec2 off=-d*(1.-z)*.22*uO.z/uR;
+    vec3 rc=vec3(bg(uv+off*1.08).r,bg(uv+off).g,bg(uv+off*.92).b);
+    rc=rc*1.18+.018;
+    float fr=pow(1.-z,3.);
+    rc+=fr*vec3(.55,.62,.75)*.55;
+    rc+=smoothstep(.08,0.,length(d-vec2(-.38,.42)))*.22;
+    col=mix(col,rc,smoothstep(1.,.985,L));
+  }
+  float ring=smoothstep(.02,0.,abs(L-1.))*.55;
+  vec3 rb=.5+.5*cos(6.2832*(atan(d.y,d.x)/6.2832+vec3(0.,.33,.67)));
+  col+=ring*mix(vec3(.8,.85,.95),rb,.45)*.5;
+  col+=(h(fc+fract(uT))-.5)*.018;
+  gl_FragColor=vec4(col,1.);
+}`;
+    const sh = (t, src) => { const x = g.createShader(t); g.shaderSource(x, src); g.compileShader(x); if (!g.getShaderParameter(x, g.COMPILE_STATUS)) console.warn(g.getShaderInfoLog(x)); return x; };
+    const pr = g.createProgram(); g.attachShader(pr, sh(g.VERTEX_SHADER, vs)); g.attachShader(pr, sh(g.FRAGMENT_SHADER, fs)); g.linkProgram(pr);
+    if (!g.getProgramParameter(pr, g.LINK_STATUS)) { cv.remove(); return; }
+    g.useProgram(pr);
+    const b = g.createBuffer(); g.bindBuffer(g.ARRAY_BUFFER, b); g.bufferData(g.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), g.STATIC_DRAW);
+    const loc = g.getAttribLocation(pr, 'p'); g.enableVertexAttribArray(loc); g.vertexAttribPointer(loc, 2, g.FLOAT, false, 0, 0);
+    const U = k => g.getUniformLocation(pr, k);
+    const uR = U('uR'), uT = U('uT'), uV = U('uV'), uO = U('uO'), uM = U('uM'), uWarm = U('uWarm'), uCool = U('uCool');
+    document.getElementById('aura').classList.add('gl');
+    let Q = 1;
+    const size = () => { Q = innerWidth < 861 ? .55 : .6; cv.width = Math.round(innerWidth * Q); cv.height = Math.round(innerHeight * Q); g.viewport(0, 0, cv.width, cv.height); };
+    size(); addEventListener('resize', size);
+    // orb keyframes per section: x, y (viewport fractions, y from top), r (fraction of min side), warm, cool
+    const K = [
+      ['.hero',     .74, .40, .30, 0,  .2],
+      ['.about',    .30, .52, .40, 0,  .5],
+      ['.work',     .86, .20, .12, .2, .3],
+      ['.marquee',  .50, .50, .20, .3, .2],
+      ['.approach', .20, .34, .24, 0,  .6],
+      ['.tools',    .78, .62, .30, .1, .4],
+      ['.contact',  .50, .46, .36, .9, .1],
+      ['.enquiry',  .16, .78, .16, .6, .2],
+    ].map(([sel, ...v]) => ({ el: document.querySelector(sel), v })).filter(k => k.el);
+    const narrowK = { '.hero': [.8, .1, .3] };
+    let anchors = [];
+    const measure = () => { anchors = K.map(k => k.el.getBoundingClientRect().top + scrollY - innerHeight * .35); };
+    measure(); addEventListener('resize', measure); ScrollTrigger.addEventListener('refresh', measure);
+    const sm = t => t * t * (3 - 2 * t);
+    const cur = K[0].v.slice(), m = { x: 0, y: 0, tx: 0, ty: 0 };
+    addEventListener('pointermove', e => { m.tx = e.clientX / innerWidth - .5; m.ty = .5 - e.clientY / innerHeight; }, { passive: true });
+    let vel = 0;
+    gsap.ticker.add((time) => {
+      if (root.dataset.theme !== 'b') return;
+      const y = scrollY; let i = 0;
+      while (i < anchors.length - 1 && y > anchors[i + 1]) i++;
+      const a = K[i].v, bb = K[Math.min(i + 1, K.length - 1)].v;
+      const span = Math.max(1, (anchors[i + 1] ?? anchors[i] + 1) - anchors[i]);
+      const t = i === K.length - 1 ? 0 : sm(Math.max(0, Math.min(1, (y - anchors[i]) / span)));
+      const nar = innerWidth < 861;
+      for (let j = 0; j < 5; j++) {
+        let tv = a[j] + (bb[j] - a[j]) * t;
+        if (nar && j < 3) { const over = i === 0 ? narrowK['.hero'] : null; if (over) tv = over[j] + (bb[j] - over[j]) * t; if (j === 0) tv = .5 + (tv - .5) * .7; }
+        cur[j] += (tv - cur[j]) * (reduce ? 1 : .07);
+      }
+      vel += (scrollVel() - vel) * .08;
+      m.x += (m.tx - m.x) * .04; m.y += (m.ty - m.y) * .04;
+      const W = cv.width, H = cv.height, mn = Math.min(W, H);
+      const wob = reduce ? 0 : Math.sin(time * .5) * .012;
+      const ox = (cur[0] + wob + m.x * .03) * W, oy = (1 - cur[1] - vel * .0012 + m.y * .03) * H;
+      const r = cur[2] * mn * (1 + Math.min(Math.abs(vel), 60) * .002);
+      g.uniform2f(uR, W, H); g.uniform1f(uT, reduce ? 0 : time); g.uniform1f(uV, Math.max(-60, Math.min(60, vel)));
+      g.uniform3f(uO, ox, oy, r); g.uniform2f(uM, m.x, m.y); g.uniform1f(uWarm, cur[3]); g.uniform1f(uCool, cur[4]);
+      g.drawArrays(g.TRIANGLES, 0, 3);
+    });
+  })();
 
   // glass lens cursor
   const lens = document.getElementById('lens');
