@@ -11,3 +11,6 @@
 *.glb  filter=lfs diff=lfs merge=lfs -text
 *.gltf filter=lfs diff=lfs merge=lfs -text
 *.zip  filter=lfs diff=lfs merge=lfs -text
+
+# redesign preview: plain git blobs, not LFS
+client/public/redesign/** !filter !diff !merge
