@@ -1014,7 +1014,7 @@ if (renderer) {
     faceCenterPx = textBottom + free / 2;
   };
   if (THREE.GLTFLoader) {
-    new THREE.GLTFLoader().load('face.glb', g => {
+    const onFace = g => {
       let mesh = null; g.scene.traverse(o => { if (o.isMesh && !mesh) mesh = o; });
       if (!mesh) return;
       const geo = mesh.geometry; geo.computeBoundingBox(); geo.center();
@@ -1023,7 +1023,12 @@ if (renderer) {
       face = new THREE.Mesh(geo, faceMat);
       faceScene.add(face);
       layoutFace();
-    });
+    };
+    const loader = new THREE.GLTFLoader();
+    if (window.FACE_B64) {
+      const bin = Uint8Array.from(atob(window.FACE_B64), c => c.charCodeAt(0));
+      loader.parse(bin.buffer, '', onFace);
+    } else loader.load('face.glb', onFace);
   }
   ScrollTrigger.addEventListener('refresh', layoutFace);
 
