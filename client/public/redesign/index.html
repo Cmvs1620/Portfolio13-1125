@@ -1036,7 +1036,7 @@ let mqX = 0, mqDir = 1;
 gsap.ticker.add((t, dt) => {
   const v = scrollVel();
   if (Math.abs(v) > .5) mqDir = Math.sign(v);
-  const speed = reduce ? 0 : (0.045 + Math.min(Math.abs(v), 60) * 0.02) * mqDir;
+  const speed = reduce ? 0 : (0.14 + Math.min(Math.abs(v), 60) * 0.035) * mqDir;
   mqX -= speed * dt * 0.06;
   const w = mq.scrollWidth / 4;
   if (mqX <= -w) mqX += w; if (mqX > 0) mqX -= w;
