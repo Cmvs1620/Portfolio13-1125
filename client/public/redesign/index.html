@@ -298,6 +298,93 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
   .ov-text .body{font-size:17px}
 }
 
+/* ---------- phone app layer ---------- */
+.menu-btn,.mmenu,.topbar,.cta-float,.wcount{display:none}
+@media (max-width:860px){
+  .nav ul{display:none}
+  .menu-btn{all:unset;display:inline-flex;align-items:center;gap:10px;cursor:pointer;font:500 12.5px var(--mono);text-transform:uppercase;letter-spacing:.06em;padding:8px 0}
+  .menu-btn i{display:grid;gap:4px}
+  .menu-btn i::before,.menu-btn i::after{content:"";display:block;width:18px;height:1.5px;background:currentColor}
+  .topbar{display:block;position:fixed;left:0;right:0;top:0;height:2px;z-index:26;background:rgba(255,255,255,.12)}
+  .topbar i{position:absolute;inset:0;background:var(--blue);transform-origin:left;transform:scaleX(0)}
+  .rail-r{display:none}
+
+  .mmenu{position:fixed;inset:0;z-index:35;background:#000;display:flex;flex-direction:column;justify-content:space-between;
+    padding:calc(18px + env(safe-area-inset-top,0px)) 16px calc(28px + env(safe-area-inset-bottom,0px));
+    clip-path:inset(0 0 100% 0);transition:clip-path .7s cubic-bezier(.75,0,.15,1);visibility:hidden}
+  .mmenu.on{clip-path:inset(0 0 0 0);visibility:visible}
+  .mmenu::before{content:"";position:absolute;left:-30%;right:-30%;bottom:-70%;height:110%;border-radius:50%;
+    background:radial-gradient(closest-side,#1b3fb0 0%,#2F66F0 76%,#DCE7FF 85%,#3D7BFF 90%,#0B2A8C 95%,transparent 100%);filter:blur(30px);opacity:.9;pointer-events:none}
+  .mm-top{position:relative;display:flex;justify-content:space-between;align-items:center}
+  .mm-top button{all:unset;cursor:pointer;font:500 12.5px var(--mono);text-transform:uppercase;letter-spacing:.06em;padding:8px 0}
+  .mm-links{position:relative;list-style:none;margin:0;padding:0;display:grid;gap:2px}
+  .mm-links a{display:flex;align-items:baseline;gap:14px;text-decoration:none;font-weight:500;font-size:clamp(3rem,15vw,5rem);letter-spacing:-.055em;line-height:1.02}
+  .mm-links a span{font:500 12px var(--mono);color:var(--mist);letter-spacing:.04em;transform:translateY(-1.4em)}
+  .mm-links li{overflow:hidden}
+  .mm-links li a{transform:translateY(105%);transition:transform .8s cubic-bezier(.2,.7,.1,1)}
+  .mmenu.on .mm-links li a{transform:none}
+  .mmenu.on .mm-links li:nth-child(2) a{transition-delay:.05s}
+  .mmenu.on .mm-links li:nth-child(3) a{transition-delay:.1s}
+  .mmenu.on .mm-links li:nth-child(4) a{transition-delay:.15s}
+  .mmenu.on .mm-links li:nth-child(5) a{transition-delay:.2s}
+  .mm-foot{position:relative;display:grid;gap:6px}
+  .mm-foot a{font:500 13px var(--mono);text-transform:uppercase;letter-spacing:.04em;text-decoration:none}
+
+  /* hero: the name fills the screen */
+  .hero{padding-top:100px}
+  .hero h1{font-size:25.5vw;line-height:.8;letter-spacing:-.065em;margin:0 0 34px -.05em}
+  .hero h1 .ln:last-child{padding-left:0}
+  .hero-info .cols{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+  .hero-info .bul{display:contents}
+  .hero-info .bul li,.tool-grid .bul li{border:1px solid rgba(255,255,255,.26);padding:8px 11px;font-size:12px;letter-spacing:.04em;color:#D4D7DE;background:rgba(0,0,0,.35)}
+  .hero-info .bul li::before,.tool-grid .bul li::before{content:none}
+  .info .ov-p{font-size:18px}
+
+  /* work: swipeable full-bleed cards */
+  .work-head{align-items:flex-end}
+  .work-head h2{font-size:15vw}
+  .wcount{display:flex;gap:10px;align-items:center;margin:0}
+  .wcount b{font-weight:500;color:var(--bone)}
+  .pin{padding-top:26px}
+  .track{flex-direction:row;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;gap:10px;padding:0 16px;width:auto;
+    scrollbar-width:none;overscroll-behavior-x:contain;scroll-padding:0 16px}
+  .track::-webkit-scrollbar{display:none}
+  .panel{width:84vw;scroll-snap-align:start;position:relative}
+  .shot{aspect-ratio:4/5}
+  .shot img{width:100%;left:0}
+  .shot .open{opacity:1;transform:none;right:14px;top:14px;bottom:auto}
+  .prow{position:absolute;left:0;right:0;bottom:0;margin:0;padding:70px 18px 18px;display:grid;gap:6px;pointer-events:none;
+    background:linear-gradient(transparent,rgba(0,0,0,.82) 55%)}
+  .panel h3{font-size:3.1rem}
+  .prow p:not(.lbl){display:none}
+  .prow .lbl{margin:0;color:#D4D7DE}
+  .work-foot{display:flex;justify-content:space-between;align-items:center;padding:16px 16px 0}
+
+  /* approach: cards stack as you scroll */
+  .ap-stage{display:block;margin-top:36px}
+  .card{position:sticky;top:calc(84px + var(--i) * 18px);margin-bottom:18px;min-height:56svh;background:rgba(6,9,22,.9);
+    -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);justify-content:space-between}
+
+  /* toolkit: tags */
+  .tool-grid{grid-template-columns:1fr;gap:28px}
+  .tool-grid .bul{display:flex;flex-wrap:wrap;gap:8px}
+
+  /* contact + floating CTA */
+  .contact{padding-bottom:70px}
+  .mailrow{flex-direction:column;gap:14px}
+  .mail{font-size:clamp(20px,6vw,26px)}
+  .cta-float{display:inline-flex;position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:24;
+    transform:translate(-50%,140%);transition:transform .5s cubic-bezier(.2,.7,.1,1);gap:10px;align-items:center;white-space:nowrap;
+    background:var(--bone);color:#000;text-decoration:none;font:500 16px var(--f);letter-spacing:-.01em;padding:15px 22px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+  .cta-float.on{transform:translate(-50%,0)}
+  .enquiry{padding-bottom:110px}
+
+  /* project overlay */
+  .ov-cover{min-height:56svh}
+  .ov h2{font-size:19vw}
+  .ov-hero{aspect-ratio:4/5;margin-top:40px}
+}
+
 @media (prefers-reduced-motion:reduce){
   .grain{animation:none}
   .manifesto .w{opacity:1}
@@ -321,7 +408,21 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
     <li><a href="#approach">Approach</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
+  <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mmenu">Menu <i aria-hidden="true"></i></button>
 </nav>
+<div class="topbar" aria-hidden="true"><i id="topFill"></i></div>
+<div class="mmenu" id="mmenu" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="mm-top"><span class="lbl">CMVS.DESIGN</span><button type="button" id="menuClose">Close</button></div>
+  <ul class="mm-links">
+    <li><a href="#work"><span>01</span>Work</a></li>
+    <li><a href="#about"><span>02</span>About</a></li>
+    <li><a href="#approach"><span>03</span>Approach</a></li>
+    <li><a href="#contact"><span>04</span>Contact</a></li>
+    <li><a href="#enquiry"><span>05</span>Enquiry</a></li>
+  </ul>
+  <div class="mm-foot"><span class="lbl dim">Say hello:</span><a href="#enquiry" data-close>maurits.vonschantz@gmail.com</a></div>
+</div>
+<a class="cta-float" id="ctaFloat" href="#enquiry">Start a project <span aria-hidden="true">→</span></a>
 
 <div class="rail-r" aria-hidden="true">
   <span class="num" id="railNum">01 / 08</span>
@@ -366,6 +467,7 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
     <div class="work-head">
       <h2>Selected work</h2>
       <p>Six projects across luxury, iGaming, hospitality and product. Open any of them for the full story.</p>
+      <p class="lbl dim wcount" aria-live="polite"><b id="wNow">01</b> / 06 <span>Swipe</span></p>
     </div>
     <div class="pin">
       <div class="track" id="track"></div>
@@ -658,16 +760,30 @@ mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
   tl.to('#apDim', { color: '#F3F5F9', duration: .8 }, 2.6);
   tl.to({}, { duration: .6 });
 });
-mm.add('(max-width: 860px) and (prefers-reduced-motion: no-preference)', () => {
-  gsap.utils.toArray('.panel .shot').forEach(s => {
-    gsap.fromTo(s, { clipPath: 'inset(12% 8% 12% 8%)' }, { clipPath: 'inset(0% 0% 0% 0%)', ease: 'none',
-      scrollTrigger: { trigger: s, start: 'top 95%', end: 'top 45%', scrub: true } });
-  });
-  gsap.utils.toArray('.card').forEach(c => {
-    gsap.fromTo(c, { xPercent: 35, rotate: 7 }, { xPercent: 0, rotate: 0, ease: 'none',
-      scrollTrigger: { trigger: c, start: 'top bottom', end: 'top 55%', scrub: true } });
-  });
-});
+/* ---------- phone app layer ---------- */
+const menu = document.getElementById('mmenu'), menuBtn = document.getElementById('menuBtn');
+const setMenu = on => {
+  menu.classList.toggle('on', on); menuBtn.setAttribute('aria-expanded', on);
+  if (lenis) on ? lenis.stop() : lenis.start();
+  if (on) setTimeout(() => document.getElementById('menuClose').focus({ preventScroll: true }), 60); else menuBtn.focus({ preventScroll: true });
+};
+menuBtn.addEventListener('click', () => setMenu(true));
+document.getElementById('menuClose').addEventListener('click', () => setMenu(false));
+menu.querySelectorAll('a').forEach(a => a.addEventListener('click', e => {
+  e.preventDefault(); e.stopImmediatePropagation(); setMenu(false);
+  const to = a.getAttribute('href'); setTimeout(() => goTo(to), 450);
+}));
+addEventListener('keydown', e => { if (e.key === 'Escape' && menu.classList.contains('on')) setMenu(false); });
+
+const wNow = document.getElementById('wNow');
+track.addEventListener('scroll', () => {
+  const p = track.querySelector('.panel'); if (!p) return;
+  const i = Math.round(track.scrollLeft / (p.offsetWidth + 10));
+  wNow.textContent = String(Math.min(P.length, i + 1)).padStart(2, '0');
+}, { passive: true });
+
+const cta = document.getElementById('ctaFloat');
+const topFill = document.getElementById('topFill');
 
 // velocity marquee
 let mqX = 0, mqDir = 1;
@@ -889,6 +1005,11 @@ gsap.ticker.add(() => {
   const max = document.documentElement.scrollHeight - innerHeight;
   const p = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
   railFill.style.transform = `scaleY(${p})`;
+  topFill.style.transform = `scaleX(${p})`;
+  if (innerWidth < 861) {
+    const enqTop = document.getElementById('enquiry').getBoundingClientRect().top;
+    cta.classList.toggle('on', scrollY > innerHeight * .7 && enqTop > innerHeight * .9 && !ov.classList.contains('on') && !menu.classList.contains('on'));
+  }
   railDot.style.top = (p * 100) + '%';
   let idx = 0;
   railEls.forEach((el, i) => { if (el.getBoundingClientRect().top <= innerHeight * .5) idx = i; });
