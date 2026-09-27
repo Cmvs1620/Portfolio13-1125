@@ -1,4 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="description" content="Carl-Maurits von Schantz, creative designer: brand identity, art direction and campaigns.">
 <title>Carl-Maurits von Schantz</title>
+</head>
+<body>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -257,6 +267,37 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
   .ov-text{grid-template-columns:1fr}
   .gal{columns:1}
 }
+/* ---------- phone readability ---------- */
+.shade{display:none}
+@media (max-width:860px){
+  .nav ul{gap:14px}
+  .nav .mark,.nav ul a{font-size:12px}
+  .shade{display:block;position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,.45) 40%,rgba(0,0,0,.55) 100%)}
+  body{font-size:17px}
+  .lbl{font-size:13px}
+  .bul{font-size:14px;gap:6px;color:#C3C7D0}
+  .info .cols{grid-template-columns:1fr;gap:6px}
+  .info .ov-p,.about-grid p,.work-head p,.prow p,.card p,.enq-intro p{font-size:17px;line-height:1.5;color:#DADDE4}
+  .info .ov-p,.about-grid p,.work-head p,.prow p,.enq-intro p,.manifesto,.hero h1,.ap-head h2,.contact h2,.tools h2,.work-head h2,.mail,.bul,.lbl{text-shadow:0 1px 14px rgba(0,0,0,.85),0 0 2px rgba(0,0,0,.6)}
+  .lbl.dim{color:#A9AEB8}
+  .manifesto{font-size:clamp(1.9rem,8.4vw,2.6rem);line-height:1.1}
+  .manifesto .w{opacity:.38}
+  .hero{padding-bottom:40px}
+  .hero h1{margin-bottom:44px}
+  .hero-info{gap:26px}
+  .card{background:rgba(6,9,22,.62);min-height:0;padding:26px 22px 28px}
+  .card .num{font-size:4rem}
+  .card h3{font-size:2.2rem}
+  .tool-grid .bul{font-size:14.5px}
+  .form{background:rgba(6,9,22,.7)}
+  .fld label,.fld legend{font-size:13px;color:#B5BAC4}
+  .err{font-size:13px}
+  .chip span{font-size:13px;padding:11px 14px}
+  .links a,.links span{font-size:13px}
+  .ov-text .body{font-size:17px}
+}
+
 @media (prefers-reduced-motion:reduce){
   .grain{animation:none}
   .manifesto .w{opacity:1}
@@ -265,6 +306,7 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
 
 <canvas id="gl" aria-hidden="true"></canvas>
 <div class="grain" aria-hidden="true"></div>
+<div class="shade" aria-hidden="true"></div>
 
 <div id="loader" aria-hidden="true">
   <span class="lbl dim">Carl-Maurits von Schantz<br>Creative designer</span>
@@ -763,13 +805,13 @@ if (renderer) {
     dm.uniforms.uT.value = reduce ? 0 : time;
     dm.uniforms.uZ.value = z;
     dm.uniforms.uAmp.value = cur.amp;
-    dm.uniforms.uI.value = cur.di * intro;
+    dm.uniforms.uI.value = cur.di * intro * (narrow ? .55 : 1);
     const au = arcMat.uniforms;
     au.uT.value = reduce ? 0 : time;
     au.uCy.value = cur.cy + mouse.y * .02;
     au.uR.value.set(narrow ? Math.min(cur.rx, cur.ry * 1.05) : cur.rx, cur.ry);
     au.uW.value = cur.w + Math.min(vel, 40) * .001;
-    au.uI.value = cur.ai * intro;
+    au.uI.value = cur.ai * intro * (narrow ? (i === 0 ? .85 : .6) : 1);
     renderer.render(scene, cam);
 
   });
@@ -920,3 +962,6 @@ copyBtn.addEventListener('click', () => {
 });
 })();
 </script>
+
+</body>
+</html>
