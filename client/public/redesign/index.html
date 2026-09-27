@@ -346,6 +346,29 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
   [data-hero="c"] .hero-info{display:none}
 }
 
+/* ---------- phone hero elements ---------- */
+.hv-status,.hv-clients{display:none}
+@media (max-width:860px){
+  [data-hero="a"] .hv-line{font-size:clamp(1.45rem,6.6vw,1.9rem);line-height:1.12;letter-spacing:-.03em;max-width:none}
+  .hv-line > span:first-child{display:block;color:#A9AEB8}
+  .rot{display:grid;height:1.15em;overflow:hidden}
+  .rot span{grid-area:1/1;display:block;color:var(--bone);will-change:transform}
+  .rot span:not(:first-child){opacity:0}
+  [data-hero="a"] .hv-status{display:flex;align-items:center;gap:10px;margin:26px 0 0;color:#D6D9E0}
+  .hv-status .live{width:8px;height:8px;border-radius:50%;background:#5CE08A;box-shadow:0 0 0 0 rgba(92,224,138,.6);animation:live 2s infinite}
+  @keyframes live{70%{box-shadow:0 0 0 9px rgba(92,224,138,0)}100%{box-shadow:0 0 0 0 rgba(92,224,138,0)}}
+  .hv-status .bar{width:1px;height:12px;background:rgba(255,255,255,.3)}
+  #clock{font-variant-numeric:tabular-nums}
+  [data-hero="a"] .hv-clients{display:block;margin:26px calc(var(--gutter) * -1) 0;overflow:hidden;border-block:1px solid rgba(255,255,255,.12);padding:12px 0;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+  .hv-cl-in{display:flex;width:max-content;animation:cl 22s linear infinite}
+  .hv-cl-in span{font-weight:500;font-size:1.25rem;letter-spacing:-.03em;color:#C9CDD5;padding:0 18px;white-space:nowrap}
+  .hv-cl-in span::after{content:"/";margin-left:36px;color:rgba(255,255,255,.28)}
+  @keyframes cl{to{transform:translateX(-50%)}}
+  [data-hero="a"] .hv-cue{margin-top:22px}
+}
+@media (max-width:860px) and (prefers-reduced-motion:reduce){ .hv-cl-in,.hv-status .live{animation:none} }
+
 /* ---------- reveals ---------- */
 .wr{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
 .wi{display:inline-block}
@@ -481,9 +504,14 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
       <span class="ln" data-split>Maurits</span>
     </h1>
     <div class="reel" aria-hidden="true"><div class="reel-in" id="reel"></div></div>
-    <div class="hv-feature" aria-hidden="true"><img src="img/givenchy-cowboy.webp" alt=""><span class="lbl">Featured: Givenchy footwear</span></div>
-    <div class="hv-fan" aria-hidden="true"><img src="img/paf-cover.webp" alt=""><img src="img/corniche-1.webp" alt=""><img src="img/givenchy-cowboy.webp" alt=""></div>
-    <p class="hv-line">Creative designer. Brand identity, art direction and campaigns.</p>
+    <p class="hv-line" aria-label="Creative designer for brand identity, art direction, campaigns and motion.">
+      <span aria-hidden="true">Creative designer for</span>
+      <span class="rot" aria-hidden="true"><span>brand identity.</span><span>art direction.</span><span>campaigns.</span><span>motion.</span></span>
+    </p>
+    <p class="hv-status lbl"><i class="live" aria-hidden="true"></i>Available for projects<span class="bar" aria-hidden="true"></span>Alicante <span id="clock">--:--</span></p>
+    <div class="hv-clients" aria-label="Clients: Givenchy, Paf, Corniche, H&amp;M, Utsikt, Ryska Posten">
+      <div class="hv-cl-in" aria-hidden="true"><span>Givenchy</span><span>Paf</span><span>Corniche</span><span>H&amp;M</span><span>Utsikt</span><span>Ryska Posten</span><span>Givenchy</span><span>Paf</span><span>Corniche</span><span>H&amp;M</span><span>Utsikt</span><span>Ryska Posten</span></div>
+    </div>
     <p class="hv-cue lbl dim">Scroll to explore <i></i></p>
     <div class="info hero-info">
       <p class="lbl name">Carl-Maurits von Schantz</p>
@@ -609,7 +637,7 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
 
 <footer>
   <span class="lbl dim">CMVS.DESIGN</span>
-  <span class="lbl dim">©2026 Carl-Maurits von Schantz. Head scan: Lee Perry-Smith, Infinite-Realities, CC BY 3.0</span>
+  <span class="lbl dim">©2026 Carl-Maurits von Schantz</span>
 </footer>
 
 <div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="ovTitle" data-lenis-prevent>
@@ -626,7 +654,6 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script>
 (() => {
 { const q = new URLSearchParams(location.search).get('hero'); document.documentElement.dataset.hero = ['a','b','c'].includes(q) ? q : 'a'; }
@@ -881,6 +908,23 @@ if (!reduce) {
   gsap.from('.hv-line, .hv-cue', { y: 20, opacity: 0, duration: 1, ease: 'expo.out', stagger: .1, delay: 1.5 });
 }
 
+// phone hero: rotating role word + live Alicante clock
+{
+  const words = [...document.querySelectorAll('.rot span')];
+  let wi = 0;
+  if (words.length && !reduce) { gsap.set(words.slice(1), { yPercent: 110, opacity: 1 }); gsap.set(words[0], { yPercent: 0 }); }
+  if (words.length && !reduce) setInterval(() => {
+    const cur = words[wi], next = words[(wi + 1) % words.length];
+    gsap.to(cur, { yPercent: -110, duration: .7, ease: 'expo.inOut' });
+    gsap.fromTo(next, { yPercent: 110 }, { yPercent: 0, duration: .7, ease: 'expo.inOut' });
+    wi = (wi + 1) % words.length;
+  }, 2200);
+  const clock = document.getElementById('clock');
+  const tick = () => { try { clock.textContent = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid' }).format(new Date()); } catch (e) {} };
+  tick(); setInterval(tick, 15000);
+  if (!reduce) gsap.from('.hv-status, .hv-clients', { y: 18, opacity: 0, duration: 1, ease: 'expo.out', stagger: .12, delay: 1.7 });
+}
+
 // velocity marquee
 let mqX = 0, mqDir = 1;
 gsap.ticker.add((t, dt) => {
@@ -976,128 +1020,8 @@ if (renderer) {
   ScrollTrigger.addEventListener('refresh', measure);
   measure();
 
-  // ---- chrome face (phone hero) ----
-  renderer.autoClear = false;
-  const faceScene = new THREE.Scene();
-  const faceCam = new THREE.PerspectiveCamera(30, 1, .1, 100);
-  faceCam.position.set(0, 0, 6);
-  const NOISE = `
-    vec3 m289(vec3 x){return x-floor(x*(1./289.))*289.;} vec4 m289(vec4 x){return x-floor(x*(1./289.))*289.;}
-    vec4 perm(vec4 x){return m289(((x*34.)+1.)*x);} vec4 tis(vec4 r){return 1.79284291400159-.85373472095314*r;}
-    float snoise(vec3 v){
-      const vec2 C=vec2(1./6.,1./3.); const vec4 D=vec4(0.,.5,1.,2.);
-      vec3 i=floor(v+dot(v,C.yyy)); vec3 x0=v-i+dot(i,C.xxx);
-      vec3 g=step(x0.yzx,x0.xyz); vec3 l=1.-g; vec3 i1=min(g.xyz,l.zxy); vec3 i2=max(g.xyz,l.zxy);
-      vec3 x1=x0-i1+C.xxx; vec3 x2=x0-i2+C.yyy; vec3 x3=x0-D.yyy; i=m289(i);
-      vec4 p=perm(perm(perm(i.z+vec4(0.,i1.z,i2.z,1.))+i.y+vec4(0.,i1.y,i2.y,1.))+i.x+vec4(0.,i1.x,i2.x,1.));
-      float n_=.142857142857; vec3 ns=n_*D.wyz-D.xzx; vec4 j=p-49.*floor(p*ns.z*ns.z);
-      vec4 x_=floor(j*ns.z); vec4 y_=floor(j-7.*x_); vec4 x=x_*ns.x+ns.yyyy; vec4 y=y_*ns.x+ns.yyyy; vec4 h=1.-abs(x)-abs(y);
-      vec4 b0=vec4(x.xy,y.xy); vec4 b1=vec4(x.zw,y.zw); vec4 s0=floor(b0)*2.+1.; vec4 s1=floor(b1)*2.+1.; vec4 sh=-step(h,vec4(0.));
-      vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy; vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
-      vec3 p0=vec3(a0.xy,h.x); vec3 p1=vec3(a0.zw,h.y); vec3 p2=vec3(a1.xy,h.z); vec3 p3=vec3(a1.zw,h.w);
-      vec4 norm=tis(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3))); p0*=norm.x; p1*=norm.y; p2*=norm.z; p3*=norm.w;
-      vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.); m=m*m;
-      return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
-    }`;
-  const faceMat = new THREE.ShaderMaterial({
-    transparent: true, side: THREE.DoubleSide,
-    uniforms: { uOp: { value: 0 }, uT: { value: 0 }, uAmp: { value: .006 }, uH: { value: 1 }, uNM: { value: new THREE.Matrix3() },
-      uSlices: { value: 20 }, uGap: { value: .2 }, uExplode: { value: 0 } },
-    vertexShader: NOISE + `
-      uniform float uT; uniform float uAmp; uniform float uH; uniform float uSlices; uniform float uExplode;
-      varying vec3 vN; varying vec3 vV; varying vec3 vP; varying vec3 vON;
-      void main(){
-        vec3 p = position, n = normalize(normal);
-        vec3 q = p / uH;
-        p += n * snoise(q * 2.4 + vec3(0., uT * .25, uT * .1)) * uAmp * uH;
-        // vertical slabs (constant x) that spread apart and shift in depth
-        float band = floor(q.x * uSlices);
-        p.x += band * uExplode * uH * .018;
-        p.z += sin(band * 1.7) * uExplode * uH * .006;
-        vP = q; vON = n;
-        vec4 mv = modelViewMatrix * vec4(p, 1.);
-        vN = normalize(normalMatrix * n); vV = -mv.xyz;
-        gl_Position = projectionMatrix * mv;
-      }`,
-    fragmentShader: NOISE + `
-      uniform float uOp; uniform float uT; uniform float uAmp; uniform mat3 uNM; uniform float uSlices; uniform float uGap;
-      varying vec3 vN; varying vec3 vV; varying vec3 vP; varying vec3 vON;
-      mat2 rot(float a){ float c=cos(a), s=sin(a); return mat2(c,-s,s,c); }
-      float flow(vec3 p){
-        vec3 w = vec3(snoise(p * 1.3 + vec3(0., uT * .12, 0.)), snoise(p * 1.3 + vec3(5.2, 1.3 - uT * .1, 2.)), 0.);
-        return snoise(p * 2.1 + w * 1.1 + vec3(0., -uT * .15, uT * .04));
-      }
-      vec3 env(vec3 r){
-        r.xz *= rot(uT * .08 + .6);
-        float y = r.y;
-        vec3 c = mix(vec3(.30,.31,.34), vec3(.93,.95,1.), smoothstep(-.1, .75, y));
-        c = mix(c, vec3(.05,.055,.07), smoothstep(.10, .0, abs(y + .05)));
-        c = mix(c, vec3(.16,.17,.2), smoothstep(-.1, -.5, y));
-        c += vec3(1.) * smoothstep(.10, .02, abs(r.x - .5)) * smoothstep(.0, .5, y) * 1.3;
-        c += vec3(1.) * smoothstep(.05, .0, abs(r.x + .55)) * smoothstep(.2, .7, y) * .9;
-        c *= 1. - smoothstep(.16, .03, abs(r.x + .15)) * .8 * smoothstep(-.2, .4, y);
-        c *= 1. - smoothstep(.14, .02, abs(r.z - .6)) * .55;
-        c += vec3(.12,.3,.9) * exp(-pow((y + .35) * 4., 2.)) * .55;
-        return c;
-      }
-      void main(){
-        if (fract(vP.x * uSlices) < uGap) discard;
-        vec3 V = normalize(vV);
-        if (!gl_FrontFacing) {
-          // what shows through a cut reads as the flat face of a solid slab
-          vec3 Nc = normalize(uNM * vec3(1., 0., 0.));
-          if (dot(Nc, V) < 0.) Nc = -Nc;
-          float dif = .2 + .8 * max(dot(Nc, normalize(vec3(.35, .55, .75))), 0.);
-          vec3 cut = vec3(.34,.36,.4) * dif + vec3(.12,.3,.9) * .22 * (1. - dif) + vec3(.9,.94,1.) * pow(max(dot(reflect(-V, Nc), normalize(vec3(.3,.7,.6))), 0.), 24.) * .35;
-          gl_FragColor = vec4(cut, uOp);
-          return;
-        }
-        float e = .01, f0 = flow(vP);
-        vec3 g = vec3(flow(vP + vec3(e,0.,0.)) - f0, flow(vP + vec3(0.,e,0.)) - f0, flow(vP + vec3(0.,0.,e)) - f0) / e;
-        vec3 on = normalize(vON);
-        g -= on * dot(g, on);
-        vec3 pn = normalize(on - g * (.012 + uAmp));
-        vec3 N = normalize(uNM * pn);
-        vec3 R = reflect(-V, N);
-        float fr = pow(1. - max(dot(N, V), 0.), 5.);
-        vec3 col = env(R) * mix(.9, 1.05, fr);
-        col = col / (1. + col * .12);
-        gl_FragColor = vec4(pow(col, vec3(1.05)), uOp);
-      }`
-  });
-  let face = null, faceBase = 1, faceCenterPx = 0, faceHpx = 0;
-  const layoutFace = () => {
-    if (!face) return;
-    const H = innerHeight, W = innerWidth;
-    const cue = document.querySelector('.hv-cue');
-    const textBottom = cue ? cue.getBoundingClientRect().bottom + scrollY : H * .5;
-    const free = Math.max(160, H - 104 - textBottom);
-    faceHpx = Math.min(H * .56, W * 1.35);
-    faceCenterPx = Math.max(H * .68, textBottom + faceHpx * .28);
-  };
-  if (THREE.GLTFLoader) {
-    const onFace = g => {
-      let mesh = null; g.scene.traverse(o => { if (o.isMesh && !mesh) mesh = o; });
-      if (!mesh) return;
-      const geo = mesh.geometry; geo.computeBoundingBox(); geo.center();
-      const bb = geo.boundingBox; faceBase = 1 / (bb.max.y - bb.min.y); faceMat.uniforms.uH.value = bb.max.y - bb.min.y;
-      if (!geo.attributes.normal) geo.computeVertexNormals();
-      face = new THREE.Mesh(geo, faceMat);
-      faceScene.add(face);
-      layoutFace();
-    };
-    const loader = new THREE.GLTFLoader();
-    if (window.FACE_B64) {
-      const bin = Uint8Array.from(atob(window.FACE_B64), c => c.charCodeAt(0));
-      loader.parse(bin.buffer, '', onFace);
-    } else loader.load('face.glb', onFace);
-  }
-  ScrollTrigger.addEventListener('refresh', layoutFace);
-
   const resize = () => {
     renderer.setSize(innerWidth, innerHeight, false);
-    faceCam.aspect = innerWidth / innerHeight; faceCam.updateProjectionMatrix();
-    layoutFace();
     cam.aspect = innerWidth / innerHeight; cam.updateProjectionMatrix();
     const v = renderer.getDrawingBufferSize(new THREE.Vector2());
     arcMat.uniforms.uRes.value.set(v.x, v.y);
@@ -1108,7 +1032,7 @@ if (renderer) {
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
   addEventListener('pointermove', e => { mouse.tx = e.clientX / innerWidth - .5; mouse.ty = e.clientY / innerHeight - .5; });
 
-  const HVS = { a: { cy: 1.86, ai: 1.15 }, b: { cy: -1.4, ai: 0 }, c: { cy: -1.02, ai: 1.1 } };
+  const HVS = { a: { cy: 2.0, ai: 1 }, b: { cy: -1.4, ai: 0 }, c: { cy: -1.02, ai: 1.1 } };
   const HV = HVS[document.documentElement.dataset.hero] || HVS.a;
   const keys = ['h', 'look', 'amp', 'sp', 'di', 'cy', 'rx', 'ry', 'w', 'ai'];
   const cur = { ...STATES[0] };
@@ -1149,27 +1073,7 @@ if (renderer) {
     au.uI.value = cur.ai * intro * (narrow ? (i === 0 ? 1.15 : .75) : 1);
     renderer.clear();
     renderer.render(scene, cam);
-    if (face && narrow && document.documentElement.dataset.hero === 'a') {
-      const H = innerHeight;
-      const hp = y / H;
-      const W = innerWidth;
-      const turn = smooth(gsap.utils.clamp(0, 1, hp / .7));
-      const unitsPerPx = 2 * Math.tan(THREE.MathUtils.degToRad(faceCam.fov / 2)) * faceCam.position.z / H;
-      const idle = reduce ? 0 : time;
-      // profile peek: enters from the right edge, turns towards you, scrolls away with the hero
-      const xPx = W * (.9 - turn * .36);
-      const cy = faceCenterPx - y * 1.2;
-      face.position.set((xPx - W / 2) * unitsPerPx + mouse.x * .1, (H / 2 - cy) * unitsPerPx, 0);
-      face.scale.setScalar(faceHpx * unitsPerPx * faceBase * (1 - turn * .22));
-      face.rotation.set(.04 + Math.sin(idle * .3) * .03, -1.05 + turn * .85 + Math.sin(idle * .4) * .05 + mouse.x * .25, 0);
-      faceMat.uniforms.uExplode.value = (1 - intro) * 1.6 + .06 + turn * .75 + Math.sin(idle * .7) * .04 + Math.min(vel, 40) * .01;
-      faceMat.uniforms.uOp.value = intro * (1 - smooth(gsap.utils.clamp(0, 1, (hp - .5) / .3)));
-      faceMat.uniforms.uT.value = idle;
-      faceMat.uniforms.uAmp.value = .004 + Math.min(vel, 40) * .0006;
-      face.updateMatrixWorld(); face.modelViewMatrix.multiplyMatrices(faceCam.matrixWorldInverse, face.matrixWorld);
-      faceMat.uniforms.uNM.value.getNormalMatrix(face.modelViewMatrix);
-      if (faceMat.uniforms.uOp.value > .01) { renderer.clearDepth(); renderer.render(faceScene, faceCam); }
-    }
+
 
   });
 }
