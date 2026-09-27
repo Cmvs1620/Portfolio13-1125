@@ -981,26 +981,78 @@ if (renderer) {
   const faceScene = new THREE.Scene();
   const faceCam = new THREE.PerspectiveCamera(30, 1, .1, 100);
   faceCam.position.set(0, 0, 6);
+  const NOISE = `
+    vec3 m289(vec3 x){return x-floor(x*(1./289.))*289.;} vec4 m289(vec4 x){return x-floor(x*(1./289.))*289.;}
+    vec4 perm(vec4 x){return m289(((x*34.)+1.)*x);} vec4 tis(vec4 r){return 1.79284291400159-.85373472095314*r;}
+    float snoise(vec3 v){
+      const vec2 C=vec2(1./6.,1./3.); const vec4 D=vec4(0.,.5,1.,2.);
+      vec3 i=floor(v+dot(v,C.yyy)); vec3 x0=v-i+dot(i,C.xxx);
+      vec3 g=step(x0.yzx,x0.xyz); vec3 l=1.-g; vec3 i1=min(g.xyz,l.zxy); vec3 i2=max(g.xyz,l.zxy);
+      vec3 x1=x0-i1+C.xxx; vec3 x2=x0-i2+C.yyy; vec3 x3=x0-D.yyy; i=m289(i);
+      vec4 p=perm(perm(perm(i.z+vec4(0.,i1.z,i2.z,1.))+i.y+vec4(0.,i1.y,i2.y,1.))+i.x+vec4(0.,i1.x,i2.x,1.));
+      float n_=.142857142857; vec3 ns=n_*D.wyz-D.xzx; vec4 j=p-49.*floor(p*ns.z*ns.z);
+      vec4 x_=floor(j*ns.z); vec4 y_=floor(j-7.*x_); vec4 x=x_*ns.x+ns.yyyy; vec4 y=y_*ns.x+ns.yyyy; vec4 h=1.-abs(x)-abs(y);
+      vec4 b0=vec4(x.xy,y.xy); vec4 b1=vec4(x.zw,y.zw); vec4 s0=floor(b0)*2.+1.; vec4 s1=floor(b1)*2.+1.; vec4 sh=-step(h,vec4(0.));
+      vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy; vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+      vec3 p0=vec3(a0.xy,h.x); vec3 p1=vec3(a0.zw,h.y); vec3 p2=vec3(a1.xy,h.z); vec3 p3=vec3(a1.zw,h.w);
+      vec4 norm=tis(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3))); p0*=norm.x; p1*=norm.y; p2*=norm.z; p3*=norm.w;
+      vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.); m=m*m;
+      return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
+    }`;
   const faceMat = new THREE.ShaderMaterial({
     transparent: true,
-    uniforms: { uOp: { value: 0 }, uT: { value: 0 } },
-    vertexShader: `varying vec3 vN; varying vec3 vV;
-      void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.); vN = normalize(normalMatrix * normal); vV = -mv.xyz; gl_Position = projectionMatrix * mv; }`,
-    fragmentShader: `uniform float uOp; uniform float uT; varying vec3 vN; varying vec3 vV;
-      vec3 studio(vec3 r){
-        vec3 c = vec3(.012,.02,.06);
-        c += vec3(.19,.42,1.) * exp(-pow((r.y + .55) * 2.2, 2.)) * 1.25;              // horizon light below
-        c += vec3(.9,.94,1.) * exp(-pow((r.y + .42) * 7., 2.)) * 1.1;                 // hot band
-        c += vec3(.85,.9,1.) * exp(-pow((r.x - .55) * 3.2, 2.)) * smoothstep(-.2, .8, r.y) * .95; // softbox right
-        c += vec3(.25,.4,.9) * exp(-pow((r.x + .8) * 3., 2.)) * .35;                  // cool fill left
+    uniforms: { uOp: { value: 0 }, uT: { value: 0 }, uAmp: { value: .012 }, uH: { value: 1 }, uNM: { value: new THREE.Matrix3() } },
+    vertexShader: NOISE + `
+      uniform float uT; uniform float uAmp; uniform float uH;
+      varying vec3 vN; varying vec3 vV; varying vec3 vP; varying vec3 vON;
+      void main(){
+        vec3 p = position, n = normalize(normal);
+        vec3 q = p / uH;
+        float d = snoise(q * 2.4 + vec3(0., uT * .25, uT * .1));
+        p += n * d * uAmp * uH;
+        vP = q; vON = n;
+        vec4 mv = modelViewMatrix * vec4(p, 1.);
+        vN = normalize(normalMatrix * n); vV = -mv.xyz;
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: NOISE + `
+      uniform float uOp; uniform float uT; uniform float uAmp; uniform mat3 uNM;
+      varying vec3 vN; varying vec3 vV; varying vec3 vP; varying vec3 vON;
+      mat2 rot(float a){ float c=cos(a), s=sin(a); return mat2(c,-s,s,c); }
+      // domain-warped flow: the swirling liquid folds
+      float flow(vec3 p){
+        vec3 w = vec3(snoise(p * 1.3 + vec3(0., uT * .12, 0.)), snoise(p * 1.3 + vec3(5.2, 1.3 - uT * .1, 2.)), 0.);
+        return snoise(p * 2.1 + w * 1.1 + vec3(0., -uT * .15, uT * .04));
+      }
+      vec3 env(vec3 r){
+        r.xz *= rot(uT * .08 + .6);
+        float y = r.y;
+        vec3 c = mix(vec3(.30,.31,.34), vec3(.93,.95,1.), smoothstep(-.1, .75, y));   // silver studio sky
+        c = mix(c, vec3(.05,.055,.07), smoothstep(.10, .0, abs(y + .05)));             // dark horizon band
+        c = mix(c, vec3(.16,.17,.2), smoothstep(-.1, -.5, y));                          // floor
+        c += vec3(1.) * smoothstep(.10, .02, abs(r.x - .5)) * smoothstep(.0, .5, y) * 1.3; // softbox
+        c += vec3(1.) * smoothstep(.05, .0, abs(r.x + .55)) * smoothstep(.2, .7, y) * .9;
+        c *= 1. - smoothstep(.16, .03, abs(r.x + .15)) * .8 * smoothstep(-.2, .4, y);  // dark band
+        c *= 1. - smoothstep(.14, .02, abs(r.z - .6)) * .55;
+        c += vec3(.12,.3,.9) * exp(-pow((y + .35) * 4., 2.)) * .55;                     // site blue from the horizon
         return c;
       }
       void main(){
-        vec3 N = normalize(vN), V = normalize(vV), R = reflect(-V, N);
-        float fr = pow(1. - max(dot(N, V), 0.), 3.);
-        vec3 col = studio(R) * .95 + vec3(.55,.7,1.) * fr * .75;
-        col = col / (1. + col * .25);
-        gl_FragColor = vec4(col, uOp);
+        vec3 V = normalize(vV);
+        // per-pixel normal from the flow gradient (object space), carried into view space
+        float e = .01;
+        float f0 = flow(vP);
+        vec3 g = vec3(flow(vP + vec3(e,0.,0.)) - f0, flow(vP + vec3(0.,e,0.)) - f0, flow(vP + vec3(0.,0.,e)) - f0) / e;
+        vec3 on = normalize(vON);
+        g -= on * dot(g, on);
+        float strength = (.028 + uAmp * 1.6) * mix(.3, 1., smoothstep(.55, -.35, on.z));
+        vec3 pn = normalize(on - g * strength);
+        vec3 N = normalize(uNM * pn);
+        vec3 R = reflect(-V, N);
+        float fr = pow(1. - max(dot(N, V), 0.), 5.);
+        vec3 col = env(R) * mix(.9, 1.05, fr);
+        col = col / (1. + col * .12);
+        gl_FragColor = vec4(pow(col, vec3(1.05)), uOp);
       }`
   });
   let face = null, faceBase = 1, faceCenterPx = 0, faceHpx = 0;
@@ -1010,15 +1062,15 @@ if (renderer) {
     const cue = document.querySelector('.hv-cue');
     const textBottom = cue ? cue.getBoundingClientRect().bottom + scrollY : H * .5;
     const free = Math.max(160, H - 104 - textBottom);
-    faceHpx = Math.min(free * .92, W * 1.05, H * .5);
-    faceCenterPx = textBottom + free / 2;
+    faceHpx = Math.min(free * 1.12, W * 1.3, H * .6);
+    faceCenterPx = textBottom + free * .56;
   };
   if (THREE.GLTFLoader) {
     const onFace = g => {
       let mesh = null; g.scene.traverse(o => { if (o.isMesh && !mesh) mesh = o; });
       if (!mesh) return;
       const geo = mesh.geometry; geo.computeBoundingBox(); geo.center();
-      const bb = geo.boundingBox; faceBase = 1 / (bb.max.y - bb.min.y);
+      const bb = geo.boundingBox; faceBase = 1 / (bb.max.y - bb.min.y); faceMat.uniforms.uH.value = bb.max.y - bb.min.y;
       if (!geo.attributes.normal) geo.computeVertexNormals();
       face = new THREE.Mesh(geo, faceMat);
       faceScene.add(face);
@@ -1064,9 +1116,9 @@ if (renderer) {
     const narrow = innerWidth < 861;
     for (const key of keys) {
       let target = a[key] + (b[key] - a[key]) * t;
-      if (narrow && i === 0 && key === 'cy') target = HV.cy + (target - a.cy) * (1 - t) * 0 + (b.cy - HV.cy) * t;
-      if (narrow && i === 0 && key === 'ai') target = HV.ai + (b.ai - HV.ai) * t;
-      cur[key] += (target - cur[key]) * k;
+      if (narrow && i === 0 && key === 'cy') target = t < .5 ? HV.cy : b.cy;
+      if (narrow && i === 0 && key === 'ai') target = t < .5 ? HV.ai * (1 - smooth(t * 2)) : b.ai * smooth(t * 2 - 1);
+      cur[key] += (target - cur[key]) * (narrow && i === 0 && key === 'cy' ? 1 : k);
     }
     mouse.x += (mouse.tx - mouse.x) * .04; mouse.y += (mouse.ty - mouse.y) * .04;
     vel += (Math.abs(scrollVel()) - vel) * .1;
@@ -1097,7 +1149,10 @@ if (renderer) {
       const idle = reduce ? 0 : time;
       face.rotation.set(.08 + Math.sin(idle * .3) * .04 - hp * .15, -.55 + hp * 1.85 + Math.sin(idle * .4) * .07 + mouse.x * .3, 0);
       faceMat.uniforms.uOp.value = intro * (1 - smooth(gsap.utils.clamp(0, 1, (hp - .55) / .4)));
-      faceMat.uniforms.uT.value = time;
+      faceMat.uniforms.uT.value = reduce ? 0 : time;
+      faceMat.uniforms.uAmp.value = .006 + Math.min(vel, 40) * .0008 + hp * .012;
+      face.updateMatrixWorld(); face.modelViewMatrix.multiplyMatrices(faceCam.matrixWorldInverse, face.matrixWorld);
+      faceMat.uniforms.uNM.value.getNormalMatrix(face.modelViewMatrix);
       if (faceMat.uniforms.uOp.value > .01) { renderer.clearDepth(); renderer.render(faceScene, faceCam); }
     }
 
