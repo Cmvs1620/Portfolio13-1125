@@ -306,6 +306,46 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
   .nav{mix-blend-mode:normal;background:linear-gradient(180deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.6) 60%,rgba(0,0,0,0) 100%);padding-bottom:26px}
 }
 
+/* ---------- phone hero variants ---------- */
+.hv-feature,.hv-fan,.hv-line,.hv-cue{display:none}
+@media (max-width:860px){
+  .reel{display:none}
+  .hero{position:relative;overflow:hidden}
+  .hv-line{margin:0;font-size:clamp(1.25rem,5.6vw,1.6rem);line-height:1.25;letter-spacing:-.02em;max-width:18ch;color:var(--bone)}
+  .hv-cue{display:flex;align-items:center;gap:12px;margin:0}
+  .hv-cue i{display:block;width:40px;height:1px;background:rgba(255,255,255,.4);position:relative;overflow:hidden}
+  .hv-cue i::after{content:"";position:absolute;top:0;left:-40%;width:40%;height:1px;background:#fff;animation:cue 2s cubic-bezier(.6,0,.2,1) infinite}
+  @keyframes cue{to{left:110%}}
+
+  /* A: clean type on black, light rising from below */
+  [data-hero="a"] .hero{min-height:100svh;justify-content:flex-start;padding-top:120px;padding-bottom:40px}
+  [data-hero="a"] .hero h1{margin-bottom:28px}
+  [data-hero="a"] .hv-line{display:block}
+  [data-hero="a"] .hv-cue{margin-top:22px}
+  [data-hero="a"] .hero-info{display:none}
+
+  /* B: magazine cover, one featured project full-bleed */
+  [data-hero="b"] .hero{min-height:100svh;justify-content:flex-end;padding-top:0;padding-bottom:128px}
+  [data-hero="b"] .hv-feature{display:block;position:absolute;inset:0;z-index:-1}
+  [data-hero="b"] .hv-feature img{width:100%;height:100%;object-fit:cover;object-position:60% 30%}
+  [data-hero="b"] .hv-feature::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,0) 28%,rgba(0,0,0,.15) 45%,rgba(0,0,0,.92) 78%,#000 100%)}
+  [data-hero="b"] .hv-feature .lbl{position:absolute;right:var(--gutter);top:96px;background:rgba(0,0,0,.55);padding:7px 10px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+  [data-hero="b"] .hero h1{margin-bottom:22px}
+  [data-hero="b"] .hv-line{display:block}
+  [data-hero="b"] .hero-info{display:none}
+
+  /* C: name up top under the arc, three projects fanned below */
+  [data-hero="c"] .hero{min-height:100svh;justify-content:flex-start;padding-top:150px;padding-bottom:120px}
+  [data-hero="c"] .hero h1{margin-bottom:20px}
+  [data-hero="c"] .hv-line{display:block;font-size:1.15rem;color:#D6D9E0}
+  [data-hero="c"] .hv-fan{display:block;position:relative;height:62vw;margin-top:44px}
+  [data-hero="c"] .hv-fan img{position:absolute;left:50%;top:0;width:46vw;height:58vw;object-fit:cover;margin-left:-23vw;border:1px solid rgba(255,255,255,.18);box-shadow:0 20px 50px rgba(0,0,0,.6);will-change:transform}
+  [data-hero="c"] .hv-fan img:nth-child(1){transform:translateX(-30vw) rotate(-9deg) translateY(4vw)}
+  [data-hero="c"] .hv-fan img:nth-child(2){transform:translateX(30vw) rotate(9deg) translateY(4vw)}
+  [data-hero="c"] .hv-fan img:nth-child(3){transform:none;z-index:2}
+  [data-hero="c"] .hero-info{display:none}
+}
+
 /* ---------- reveals ---------- */
 .wr{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
 .wi{display:inline-block}
@@ -441,6 +481,10 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
       <span class="ln" data-split>Maurits</span>
     </h1>
     <div class="reel" aria-hidden="true"><div class="reel-in" id="reel"></div></div>
+    <div class="hv-feature" aria-hidden="true"><img src="img/givenchy-cowboy.webp" alt=""><span class="lbl">Featured: Givenchy footwear</span></div>
+    <div class="hv-fan" aria-hidden="true"><img src="img/paf-cover.webp" alt=""><img src="img/corniche-1.webp" alt=""><img src="img/givenchy-cowboy.webp" alt=""></div>
+    <p class="hv-line">Creative designer. Brand identity, art direction and campaigns.</p>
+    <p class="hv-cue lbl dim">Scroll to explore <i></i></p>
     <div class="info hero-info">
       <p class="lbl name">Carl-Maurits von Schantz</p>
       <div>
@@ -565,7 +609,7 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
 
 <footer>
   <span class="lbl dim">CMVS.DESIGN</span>
-  <span class="lbl dim">©2026 Carl-Maurits von Schantz</span>
+  <span class="lbl dim">©2026 Carl-Maurits von Schantz. Head scan: Lee Perry-Smith, Infinite-Realities, CC BY 3.0</span>
 </footer>
 
 <div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="ovTitle" data-lenis-prevent>
@@ -582,8 +626,10 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script>
 (() => {
+{ const q = new URLSearchParams(location.search).get('hero'); document.documentElement.dataset.hero = ['a','b','c'].includes(q) ? q : 'a'; }
 /* =========================================================
    CONTENT (from the portfolio repo)
 ========================================================= */
@@ -823,6 +869,18 @@ gsap.ticker.add((t, dtMs) => {
   reel.style.transform = `translate3d(${reelX}px,0,0)`;
 });
 
+if (!reduce) {
+  const fan = [...document.querySelectorAll('.hv-fan img')];
+  if (fan.length) {
+    gsap.to(fan[0], { x: '-=14vw', rotate: -16, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+    gsap.to(fan[1], { x: '+=14vw', rotate: 16, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+    gsap.to(fan[2], { y: '-8vw', scale: 1.06, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+    gsap.from(fan, { y: 80, opacity: 0, rotate: 0, duration: 1.4, ease: 'expo.out', stagger: .1, delay: 1.6 });
+  }
+  gsap.to('.hv-feature img', { yPercent: 12, scale: 1.08, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  gsap.from('.hv-line, .hv-cue', { y: 20, opacity: 0, duration: 1, ease: 'expo.out', stagger: .1, delay: 1.5 });
+}
+
 // velocity marquee
 let mqX = 0, mqDir = 1;
 gsap.ticker.add((t, dt) => {
@@ -918,8 +976,61 @@ if (renderer) {
   ScrollTrigger.addEventListener('refresh', measure);
   measure();
 
+  // ---- chrome face (phone hero) ----
+  renderer.autoClear = false;
+  const faceScene = new THREE.Scene();
+  const faceCam = new THREE.PerspectiveCamera(30, 1, .1, 100);
+  faceCam.position.set(0, 0, 6);
+  const faceMat = new THREE.ShaderMaterial({
+    transparent: true,
+    uniforms: { uOp: { value: 0 }, uT: { value: 0 } },
+    vertexShader: `varying vec3 vN; varying vec3 vV;
+      void main(){ vec4 mv = modelViewMatrix * vec4(position, 1.); vN = normalize(normalMatrix * normal); vV = -mv.xyz; gl_Position = projectionMatrix * mv; }`,
+    fragmentShader: `uniform float uOp; uniform float uT; varying vec3 vN; varying vec3 vV;
+      vec3 studio(vec3 r){
+        vec3 c = vec3(.012,.02,.06);
+        c += vec3(.19,.42,1.) * exp(-pow((r.y + .55) * 2.2, 2.)) * 1.25;              // horizon light below
+        c += vec3(.9,.94,1.) * exp(-pow((r.y + .42) * 7., 2.)) * 1.1;                 // hot band
+        c += vec3(.85,.9,1.) * exp(-pow((r.x - .55) * 3.2, 2.)) * smoothstep(-.2, .8, r.y) * .95; // softbox right
+        c += vec3(.25,.4,.9) * exp(-pow((r.x + .8) * 3., 2.)) * .35;                  // cool fill left
+        return c;
+      }
+      void main(){
+        vec3 N = normalize(vN), V = normalize(vV), R = reflect(-V, N);
+        float fr = pow(1. - max(dot(N, V), 0.), 3.);
+        vec3 col = studio(R) * .95 + vec3(.55,.7,1.) * fr * .75;
+        col = col / (1. + col * .25);
+        gl_FragColor = vec4(col, uOp);
+      }`
+  });
+  let face = null, faceBase = 1, faceCenterPx = 0, faceHpx = 0;
+  const layoutFace = () => {
+    if (!face) return;
+    const H = innerHeight, W = innerWidth;
+    const cue = document.querySelector('.hv-cue');
+    const textBottom = cue ? cue.getBoundingClientRect().bottom + scrollY : H * .5;
+    const free = Math.max(160, H - 104 - textBottom);
+    faceHpx = Math.min(free * .92, W * 1.05, H * .5);
+    faceCenterPx = textBottom + free / 2;
+  };
+  if (THREE.GLTFLoader) {
+    new THREE.GLTFLoader().load('face.glb', g => {
+      let mesh = null; g.scene.traverse(o => { if (o.isMesh && !mesh) mesh = o; });
+      if (!mesh) return;
+      const geo = mesh.geometry; geo.computeBoundingBox(); geo.center();
+      const bb = geo.boundingBox; faceBase = 1 / (bb.max.y - bb.min.y);
+      if (!geo.attributes.normal) geo.computeVertexNormals();
+      face = new THREE.Mesh(geo, faceMat);
+      faceScene.add(face);
+      layoutFace();
+    });
+  }
+  ScrollTrigger.addEventListener('refresh', layoutFace);
+
   const resize = () => {
     renderer.setSize(innerWidth, innerHeight, false);
+    faceCam.aspect = innerWidth / innerHeight; faceCam.updateProjectionMatrix();
+    layoutFace();
     cam.aspect = innerWidth / innerHeight; cam.updateProjectionMatrix();
     const v = renderer.getDrawingBufferSize(new THREE.Vector2());
     arcMat.uniforms.uRes.value.set(v.x, v.y);
@@ -930,6 +1041,8 @@ if (renderer) {
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
   addEventListener('pointermove', e => { mouse.tx = e.clientX / innerWidth - .5; mouse.ty = e.clientY / innerHeight - .5; });
 
+  const HVS = { a: { cy: 1.86, ai: 1.15 }, b: { cy: -1.4, ai: 0 }, c: { cy: -1.02, ai: 1.1 } };
+  const HV = HVS[document.documentElement.dataset.hero] || HVS.a;
   const keys = ['h', 'look', 'amp', 'sp', 'di', 'cy', 'rx', 'ry', 'w', 'ai'];
   const cur = { ...STATES[0] };
   const smooth = t => t * t * (3 - 2 * t);
@@ -946,7 +1059,8 @@ if (renderer) {
     const narrow = innerWidth < 861;
     for (const key of keys) {
       let target = a[key] + (b[key] - a[key]) * t;
-      if (narrow && key === 'cy' && i === 0) target -= .15 * (1 - t);
+      if (narrow && i === 0 && key === 'cy') target = HV.cy + (target - a.cy) * (1 - t) * 0 + (b.cy - HV.cy) * t;
+      if (narrow && i === 0 && key === 'ai') target = HV.ai + (b.ai - HV.ai) * t;
       cur[key] += (target - cur[key]) * k;
     }
     mouse.x += (mouse.tx - mouse.x) * .04; mouse.y += (mouse.ty - mouse.y) * .04;
@@ -966,7 +1080,21 @@ if (renderer) {
     au.uR.value.set(narrow ? Math.min(cur.rx, cur.ry * 1.05) : cur.rx, cur.ry);
     au.uW.value = cur.w + Math.min(vel, 40) * .001;
     au.uI.value = cur.ai * intro * (narrow ? (i === 0 ? 1.15 : .75) : 1);
+    renderer.clear();
     renderer.render(scene, cam);
+    if (face && narrow && document.documentElement.dataset.hero === 'a') {
+      const H = innerHeight;
+      const hp = gsap.utils.clamp(0, 1, y / (H * .9));
+      const unitsPerPx = 2 * Math.tan(THREE.MathUtils.degToRad(faceCam.fov / 2)) * faceCam.position.z / H;
+      const cy = faceCenterPx - y * .55 - hp * H * .08;
+      face.position.set(mouse.x * .15, (H / 2 - cy) * unitsPerPx, 0);
+      face.scale.setScalar(faceHpx * unitsPerPx * faceBase * (1 - hp * .18));
+      const idle = reduce ? 0 : time;
+      face.rotation.set(.08 + Math.sin(idle * .3) * .04 - hp * .15, -.55 + hp * 1.85 + Math.sin(idle * .4) * .07 + mouse.x * .3, 0);
+      faceMat.uniforms.uOp.value = intro * (1 - smooth(gsap.utils.clamp(0, 1, (hp - .55) / .4)));
+      faceMat.uniforms.uT.value = time;
+      if (faceMat.uniforms.uOp.value > .01) { renderer.clearDepth(); renderer.render(faceScene, faceCam); }
+    }
 
   });
 }
