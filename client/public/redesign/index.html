@@ -238,8 +238,8 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
 .ov-text .body{font-size:clamp(17px,1.3vw,20px);line-height:1.6;max-width:62ch;color:#C9CCD4}
 .ov-text .body p{margin:0 0 1.1em}
 .ov-text .body p:first-child{font-size:clamp(22px,2vw,30px);line-height:1.3;color:var(--bone);letter-spacing:-.015em}
-.gal{columns:2;column-gap:clamp(12px,2vw,24px);margin:clamp(56px,10vh,110px) var(--gutter) 0}
-.gal img{width:100%;margin-bottom:clamp(12px,2vw,24px);break-inside:avoid;background:var(--ground-2)}
+.gal{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,24px);align-items:start;margin:clamp(56px,10vh,110px) var(--gutter) 0}
+.gal img{width:100%;height:auto;display:block;background:var(--ground-2)}
 .ov-next{margin:clamp(56px,10vh,110px) var(--gutter) 0;border-top:1px solid var(--line);padding:24px 0 100px;display:flex;justify-content:space-between;align-items:center;gap:16px}
 .ov-next button{all:unset;cursor:pointer;font-weight:500;font-size:clamp(2.4rem,6vw,6rem);letter-spacing:-.055em;line-height:.9}
 .ov-next button:focus-visible{outline:2px solid var(--blue)}
@@ -255,52 +255,64 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
   .info .ov-p{margin-left:0}
   .info .name{display:none}
   .about-grid{grid-template-columns:1fr}
-  .pin{height:auto;display:block;overflow:visible;padding-top:48px}
-  .track{flex-direction:column;width:auto;gap:72px}
-  .panel{width:100%}
   .prow{grid-template-columns:1fr;gap:12px}
-  .work-bar{display:none}
   .ap-pin{height:auto;overflow:visible;padding:clamp(96px,14vh,160px) var(--gutter)}
   .ap-head{position:static;text-align:left}
   .ap-stage{position:static;width:auto;display:grid;gap:18px;margin-top:40px}
   .card{position:relative;left:auto;top:auto;width:100%;aspect-ratio:auto;min-height:72vw;gap:40px}
   .tool-grid{grid-template-columns:1fr 1fr}
   .ov-text{grid-template-columns:1fr}
-  .gal{columns:1}
+  .gal{grid-template-columns:1fr}
 }
 /* ---------- phone readability ---------- */
 .shade{position:fixed;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.04) 0%,rgba(0,0,0,.26) 55%,rgba(0,0,0,.34) 100%)}
+.reel,.m-only{display:none}
 @media (max-width:860px){
-  .nav ul{gap:14px}
-  .nav .mark,.nav ul a{font-size:12px}
-  .shade{display:block;position:fixed;inset:0;z-index:1;pointer-events:none;
-    background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,.45) 40%,rgba(0,0,0,.55) 100%)}
+  :root{--gutter:22px}
+  .shade{display:none}
   body{font-size:17px}
-  .lbl{font-size:13px}
-  .bul{font-size:14px;gap:6px;color:#C3C7D0}
+  .lbl{font-size:12.5px}
+  .bul{font-size:14px;gap:6px;color:#C9CDD5}
   .info .cols{grid-template-columns:1fr;gap:6px}
-  .info .ov-p,.about-grid p,.work-head p,.prow p,.card p,.enq-intro p{font-size:17px;line-height:1.5;color:#DADDE4}
-  .info .ov-p,.about-grid p,.work-head p,.prow p,.enq-intro p,.manifesto,.hero h1,.ap-head h2,.contact h2,.tools h2,.work-head h2,.mail,.bul,.lbl{text-shadow:0 1px 14px rgba(0,0,0,.85),0 0 2px rgba(0,0,0,.6)}
-  .lbl.dim{color:#A9AEB8}
-  .manifesto{font-size:clamp(1.9rem,8.4vw,2.6rem);line-height:1.1}
-  .manifesto .w{opacity:.38}
-  .hero{padding-bottom:40px}
-  .hero h1{margin-bottom:44px}
-  .hero-info{gap:26px}
-  .card{background:rgba(6,9,22,.62);min-height:0;padding:26px 22px 28px}
-  .card .num{font-size:4rem}
-  .card h3{font-size:2.2rem}
-  .tool-grid .bul{font-size:14.5px}
-  .form{background:rgba(6,9,22,.7)}
-  .fld label,.fld legend{font-size:13px;color:#B5BAC4}
+  .info .ov-p,.about-grid p,.work-head p,.prow p,.card p,.enq-intro p{font-size:17px;line-height:1.6;color:#D6D9E0}
+  .lbl.dim{color:#A3A8B3}
+  .sec{padding:120px var(--gutter)}
+  .sh{margin-bottom:44px}
+  .manifesto{font-size:clamp(2rem,9vw,2.8rem);line-height:1.08}
+  .manifesto .w{opacity:.3}
+  .about-grid{gap:40px;margin-top:64px}
+  .card{padding:28px 24px 30px}
+  .card .num{font-size:4.2rem}
+  .card h3{font-size:2.4rem}
+  .form{background:rgba(6,9,22,.72)}
+  .fld label,.fld legend{font-size:12.5px;color:#B5BAC4}
   .err{font-size:13px}
-  .chip span{font-size:13px;padding:11px 14px}
-  .links a,.links span{font-size:13px}
+  .chip span{font-size:12.5px;padding:11px 14px}
+  .links a,.links span{font-size:12.5px}
   .ov-text .body{font-size:17px}
+  .m-only{display:block}
+  .reel{display:block;margin:0 calc(var(--gutter) * -1) 30px;overflow:hidden;pointer-events:none}
+  .reel-in{display:flex;gap:10px;width:max-content;will-change:transform}
+  .reel-in span{display:block;width:38vw;aspect-ratio:4/5;height:calc(38vw * 1.25);overflow:hidden;background:var(--ground-2)}
+  .reel-in img{width:100%;height:100%;object-fit:cover;display:block}
+  .about .whatido{margin-top:48px;border-top:1px solid var(--line);padding-top:18px}
+  .about .whatido .cols{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .about .whatido .bul{display:contents}
+  .about .whatido .bul li{border:1px solid rgba(255,255,255,.26);padding:8px 11px;font-size:12px;letter-spacing:.04em;color:#D4D7DE;background:rgba(0,0,0,.35)}
+  .about .whatido .bul li::before{content:none}
+  .tool-grid .bul{display:flex;flex-wrap:wrap;gap:8px}
+  .tool-grid .bul li{border:1px solid rgba(255,255,255,.26);padding:8px 11px;font-size:12px;letter-spacing:.04em;color:#D4D7DE;background:rgba(0,0,0,.35)}
+  .tool-grid .bul li::before{content:none}
+  .nav{mix-blend-mode:normal;background:linear-gradient(180deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.6) 60%,rgba(0,0,0,0) 100%);padding-bottom:26px}
 }
 
+/* ---------- reveals ---------- */
+.wr{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
+.wi{display:inline-block}
+
 /* ---------- section headers ---------- */
-.sh{display:grid;grid-template-columns:minmax(64px,1fr) 2fr 2fr;gap:16px;align-items:baseline;border-top:1px solid var(--line);padding-top:14px;margin:0 0 clamp(40px,7vh,72px)}
+.sh{--sx:1;position:relative;display:grid;grid-template-columns:minmax(64px,1fr) 2fr 2fr;gap:16px;align-items:baseline;padding-top:14px;margin:0 0 clamp(40px,7vh,72px)}
+.sh::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:rgba(255,255,255,.22);transform:scaleX(var(--sx));transform-origin:left}
 .sh .n{color:#8FB0FF}
 .sh .d{justify-self:end;text-align:right;color:var(--mist)}
 .marquee .sh,.work .sh{margin-left:var(--gutter);margin-right:var(--gutter)}
@@ -337,43 +349,37 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
   .rail-r{display:none}
 
 
-  /* hero: the name fills the screen */
-  .hero{padding-top:100px}
-  .hero h1{font-size:25.5vw;line-height:.8;letter-spacing:-.065em;margin:0 0 34px -.05em}
+  /* hero: the name fills the screen, the work right under it */
+  .hero{padding-top:96px;padding-bottom:36px;justify-content:flex-end}
+  .hero h1{font-size:25.5vw;line-height:.8;letter-spacing:-.065em;margin:0 0 28px -.05em}
   .hero h1 .ln:last-child{padding-left:0}
-  .hero-info .cols{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
-  .hero-info .bul{display:contents}
-  .hero-info .bul li,.tool-grid .bul li{border:1px solid rgba(255,255,255,.26);padding:8px 11px;font-size:12px;letter-spacing:.04em;color:#D4D7DE;background:rgba(0,0,0,.35)}
-  .hero-info .bul li::before,.tool-grid .bul li::before{content:none}
-  .info .ov-p{font-size:18px}
+  .hero-info > div:nth-of-type(2),.hero-info .name{display:none}
+  .info .ov-p{font-size:18px;margin-left:0}
 
-  /* work: swipeable full-bleed cards */
+  /* work: pinned horizontal scroll, portrait cards */
   .work-head{align-items:flex-end}
   .work-head h2{font-size:15vw}
   .wcount{display:flex;gap:10px;align-items:center;margin:0}
   .wcount b{font-weight:500;color:var(--bone)}
-  .pin{padding-top:26px}
-  .track{flex-direction:row;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;gap:10px;padding:0 16px;width:auto;
-    scrollbar-width:none;overscroll-behavior-x:contain;scroll-padding:0 16px}
-  .track::-webkit-scrollbar{display:none}
-  .panel{width:84vw;scroll-snap-align:start;position:relative}
-  .shot{aspect-ratio:4/5}
-  .shot img{width:100%;left:0}
+  .pin{height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;padding-top:0}
+  .track{flex-direction:row;gap:14px;padding:0 var(--gutter);width:max-content}
+  .panel{width:78vw;position:relative}
+  .shot{aspect-ratio:auto;height:calc(78vw * 1.25);max-height:66svh}
   .shot .open{opacity:1;transform:none;right:14px;top:14px;bottom:auto}
-  .prow{position:absolute;left:0;right:0;bottom:0;margin:0;padding:70px 18px 18px;display:grid;gap:6px;pointer-events:none;
-    background:linear-gradient(transparent,rgba(0,0,0,.82) 55%)}
-  .panel h3{font-size:3.1rem}
+  .prow{position:absolute;left:0;right:0;bottom:0;margin:0;padding:80px 18px 18px;display:grid;gap:6px;pointer-events:none;
+    background:linear-gradient(transparent,rgba(0,0,0,.8) 60%)}
+  .panel h3{font-size:3rem}
   .prow p:not(.lbl){display:none}
   .prow .lbl{margin:0;color:#D4D7DE}
-  .work-foot{display:flex;justify-content:space-between;align-items:center;padding:16px 16px 0}
+  .work-bar{display:block;margin:28px var(--gutter) 0}
 
   /* approach: cards stack as you scroll */
   .ap-stage{display:block;margin-top:36px}
-  .card{position:sticky;top:calc(84px + var(--i) * 18px);margin-bottom:18px;min-height:56svh;background:rgba(6,9,22,.9);
+  .card{position:sticky;top:calc(90px + var(--i) * 20px);margin-bottom:22px;min-height:54svh;background:rgba(6,9,22,.9);transform-origin:50% 0;
     -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);justify-content:space-between}
 
   /* toolkit: tags */
-  .tool-grid{grid-template-columns:1fr;gap:28px}
+  .tool-grid{grid-template-columns:1fr;gap:36px}
   .tool-grid .bul{display:flex;flex-wrap:wrap;gap:8px}
 
   /* contact + floating CTA */
@@ -434,6 +440,7 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
       <span class="ln" data-split>Carl-</span>
       <span class="ln" data-split>Maurits</span>
     </h1>
+    <div class="reel" aria-hidden="true"><div class="reel-in" id="reel"></div></div>
     <div class="info hero-info">
       <p class="lbl name">Carl-Maurits von Schantz</p>
       <div>
@@ -458,6 +465,9 @@ fieldset.fld{border:0;margin:0;padding:0;min-width:0}
       <div><p class="lbl">How I work:</p><p>Every detail is intentional. The work starts from a clear objective and aims for design that holds up long after the first impression.</p></div>
       <div><p class="lbl">Where it comes from:</p><p>Fashion, watches, hospitality and digital products. Each industry changed how I think about how design behaves, and how it looks.</p></div>
       <div><p class="lbl">Lived and worked in:</p><div class="places"><span>Paris</span><span>Stockholm</span><span>Alicante</span></div></div>
+    </div>
+    <div class="whatido m-only"><p class="lbl">What I do:</p>
+      <div class="cols"><ul class="bul"><li>Visual direction</li><li>Brand identity design</li><li>Campaign design</li><li>Motion graphics</li><li>CRM and social assets</li><li>Packaging and print</li><li>User interface design</li><li>3D and AI imagery</li></ul></div>
     </div>
   </section>
 
@@ -642,7 +652,7 @@ const track = document.getElementById('track');
 track.innerHTML = P.map((p,i) => `
   <article class="panel">
     <button class="shot" type="button" data-open="${i}" aria-label="Open ${p.title} project">
-      <img src="${img(p.cover)}" alt="${p.title}: ${p.lede}" ${i>1?'loading="lazy"':''}>
+      <img src="${img(p.cover)}" alt="${p.title}: ${p.lede}" decoding="async">
       <span class="open">View project</span>
     </button>
     <div class="prow">
@@ -651,6 +661,9 @@ track.innerHTML = P.map((p,i) => `
     </div>
   </article>`).join('');
 
+const reel = document.getElementById('reel');
+const reelSet = P.map(p => `<span><img src="${img(p.cover)}" alt="" decoding="async"></span>`).join('');
+reel.innerHTML = reelSet + reelSet;
 const mq = document.getElementById('mq');
 const row = CLIENTS.map(c => `<span>${c}</span>`).join('');
 mq.innerHTML = row + row + row + row;
@@ -728,13 +741,14 @@ if (!reduce) {
   gsap.from('.contact h2', { y: 80, ease: 'none', scrollTrigger: { trigger: '.contact', start: 'top bottom', end: 'center center', scrub: true } });
 }
 
+const wNow = document.getElementById('wNow');
 const mm = gsap.matchMedia();
-mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
-  // horizontal work track
+mm.add('(prefers-reduced-motion: no-preference)', () => {
+  // horizontal work track (desktop and phone)
   const dist = () => track.scrollWidth - innerWidth;
   const tween = gsap.to(track, { x: () => -dist(), ease: 'none',
     scrollTrigger: { trigger: '.pin', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: .8, invalidateOnRefresh: true, anticipatePin: 1,
-      onUpdate: s => gsap.set('#workbar', { scaleX: s.progress }) } });
+      onUpdate: s => { gsap.set('#workbar', { scaleX: s.progress }); if (wNow) wNow.textContent = String(Math.round(s.progress * (P.length - 1)) + 1).padStart(2, '0'); } } });
   gsap.utils.toArray('.panel').forEach(p => {
     gsap.fromTo(p.querySelector('img'), { xPercent: 7 }, { xPercent: -7, ease: 'none',
       scrollTrigger: { trigger: p, containerAnimation: tween, start: 'left right', end: 'right left', scrub: true } });
@@ -742,6 +756,8 @@ mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
       scrollTrigger: { trigger: p, containerAnimation: tween, start: 'left right', end: 'left 45%', scrub: true } });
   });
 
+});
+mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
   // glass card cascade
   const cards = gsap.utils.toArray('.card');
   const tl = gsap.timeline({ scrollTrigger: { trigger: '.ap-pin', start: 'top top', end: '+=260%', pin: true, scrub: 1, anticipatePin: 1 } });
@@ -760,19 +776,57 @@ mm.add('(min-width: 861px) and (prefers-reduced-motion: no-preference)', () => {
   tl.to({}, { duration: .6 });
 });
 /* ---------- phone app layer ---------- */
-const wNow = document.getElementById('wNow');
-track.addEventListener('scroll', () => {
-  const p = track.querySelector('.panel'); if (!p) return;
-  const i = Math.round(track.scrollLeft / (p.offsetWidth + 10));
-  wNow.textContent = String(Math.min(P.length, i + 1)).padStart(2, '0');
-}, { passive: true });
+
 
 const topFill = document.getElementById('topFill');
+
+mm.add('(max-width: 860px) and (prefers-reduced-motion: no-preference)', () => {
+  const cards = gsap.utils.toArray('.card');
+  cards.forEach((c, i) => {
+    if (i === cards.length - 1) return;
+    gsap.to(c, { scale: .9, opacity: .45, ease: 'none', scrollTrigger: { trigger: cards[i + 1], start: 'top 90%', end: 'top 30%', scrub: true } });
+  });
+  gsap.from('.card', { yPercent: 18, rotate: 3, ease: 'none', stagger: 0, scrollTrigger: { trigger: '.ap-stage', start: 'top bottom', end: 'top 60%', scrub: true } });
+});
+
+// headline word reveals, header lines, tag pops (all widths)
+if (!reduce) {
+  document.querySelectorAll('.work-head h2, .tools h2, .contact h2, .enq-intro h3').forEach(h => {
+    h.innerHTML = h.textContent.trim().split(/\s+/).map(w => `<span class="wr"><span class="wi">${w}</span></span>`).join(' ');
+    gsap.from(h.querySelectorAll('.wi'), { yPercent: 110, rotate: 4, duration: 1.1, ease: 'expo.out', stagger: .07,
+      scrollTrigger: { trigger: h, start: 'top 88%' } });
+  });
+  gsap.utils.toArray('.sh').forEach(el => {
+    gsap.fromTo(el, { '--sx': 0 }, { '--sx': 1, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 90%' } });
+    gsap.from(el.children, { y: 14, opacity: 0, duration: .8, ease: 'power3.out', stagger: .08, scrollTrigger: { trigger: el, start: 'top 90%' } });
+  });
+  gsap.utils.toArray('.tool-grid > div, .whatido').forEach(g => {
+    gsap.from(g.querySelectorAll('li'), { y: 16, opacity: 0, duration: .6, ease: 'power3.out', stagger: .05, scrollTrigger: { trigger: g, start: 'top 85%' } });
+  });
+}
+
+// own scroll velocity, so touch scrolling (which Lenis leaves native) still drives the motion
+let sVel = 0, lastSY = scrollY;
+gsap.ticker.add((t, dtMs) => {
+  const d = scrollY - lastSY; lastSY = scrollY;
+  sVel += ((d / Math.max(dtMs, 8)) * 16 - sVel) * .25;
+});
+const scrollVel = () => { const l = lenis ? lenis.velocity : 0; return Math.abs(l) > Math.abs(sVel) ? l : sVel; };
+
+// hero reel
+let reelX = 0;
+gsap.ticker.add((t, dtMs) => {
+  if (!reel.offsetWidth) return;
+  const w = reel.scrollWidth / 2;
+  reelX -= reduce ? 0 : (0.04 + Math.min(Math.abs(scrollVel()), 50) * .03) * dtMs;
+  if (reelX <= -w) reelX += w;
+  reel.style.transform = `translate3d(${reelX}px,0,0)`;
+});
 
 // velocity marquee
 let mqX = 0, mqDir = 1;
 gsap.ticker.add((t, dt) => {
-  const v = lenis ? lenis.velocity : 0;
+  const v = scrollVel();
   if (Math.abs(v) > .5) mqDir = Math.sign(v);
   const speed = reduce ? 0 : (0.045 + Math.min(Math.abs(v), 60) * 0.02) * mqDir;
   mqX -= speed * dt * 0.06;
@@ -896,7 +950,7 @@ if (renderer) {
       cur[key] += (target - cur[key]) * k;
     }
     mouse.x += (mouse.tx - mouse.x) * .04; mouse.y += (mouse.ty - mouse.y) * .04;
-    vel += ((lenis ? Math.abs(lenis.velocity) : 0) - vel) * .1;
+    vel += (Math.abs(scrollVel()) - vel) * .1;
     z += reduce ? 0 : (cur.sp + Math.min(vel, 60) * .08) * dt;
 
     cam.position.set(mouse.x * .8, cur.h - mouse.y * .3, 6);
@@ -905,13 +959,13 @@ if (renderer) {
     dm.uniforms.uT.value = reduce ? 0 : time;
     dm.uniforms.uZ.value = z;
     dm.uniforms.uAmp.value = cur.amp;
-    dm.uniforms.uI.value = cur.di * intro * (narrow ? .55 : 1);
+    dm.uniforms.uI.value = cur.di * intro * (narrow ? .9 : 1);
     const au = arcMat.uniforms;
     au.uT.value = reduce ? 0 : time;
     au.uCy.value = cur.cy + mouse.y * .02;
     au.uR.value.set(narrow ? Math.min(cur.rx, cur.ry * 1.05) : cur.rx, cur.ry);
     au.uW.value = cur.w + Math.min(vel, 40) * .001;
-    au.uI.value = cur.ai * intro * (narrow ? (i === 0 ? .85 : .6) : 1);
+    au.uI.value = cur.ai * intro * (narrow ? (i === 0 ? 1.15 : .75) : 1);
     renderer.render(scene, cam);
 
   });
@@ -935,7 +989,7 @@ const fill = i => {
     <p class="lbl yr">${p.place}</p>`;
   ovHero.src = img(p.cover); ovHero.alt = `${p.title} key visual`;
   ovText.innerHTML = p.text.map(t => `<p>${t}</p>`).join('');
-  ovGal.innerHTML = p.gallery.map((g, k) => `<img src="${img(g)}" alt="${p.title}, image ${k + 1}" loading="lazy">`).join('');
+  ovGal.innerHTML = p.gallery.map((g, k) => `<img src="${img(g)}" alt="${p.title}, image ${k + 1}" decoding="async">`).join('');
   ovNext.textContent = P[(i + 1) % P.length].title;
   ov.scrollTop = 0;
 };
